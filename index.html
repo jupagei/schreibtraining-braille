@@ -1,0 +1,3747 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Braille-Schreibtraining</title>
+
+<style>
+:root {
+    --purple: #2E297D;
+    --purple-dark: #211d60;
+    --purple-soft: #f4f2ff;
+    --border: #dedbea;
+    --text: #222;
+    --muted: #626262;
+    --view-top: 8px;
+    --view-height: 532px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f7f7f7;
+    color: var(--text);
+    margin: 0;
+    padding: 12px;
+}
+
+.container {
+    position: relative;
+    max-width: 780px;
+    margin: auto;
+    background: #fff;
+    padding: 22px 24px 34px;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.08);
+}
+
+h1, h2 {
+    text-align: center;
+    color: var(--purple);
+}
+
+h1 { margin: 0 0 10px; font-size: 2rem; }
+
+.sub-menu-title.training-title {
+    color: #d99a2b;
+}
+
+.instruction {
+    text-align: center;
+    font-size: 1.08rem;
+    line-height: 1.55;
+}
+
+body.training-theme-global h1 {
+    color: #b77911;
+}
+
+body.training-theme-global .container > .instruction {
+    color: #8f6215;
+}
+
+.module-area {
+    margin: 18px 0;
+    padding: 20px;
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    background: #faf9ff;
+}
+
+.module-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 12px;
+    margin: 18px 0;
+}
+
+.module-button {
+    min-height: 66px;
+    background: #ebeaf4;
+    color: #222;
+    border: 2px solid #cbc8dd;
+    text-align: center;
+}
+
+.module-button:hover {
+    background: #dfddeb;
+}
+
+.module-button.selected {
+    background: var(--purple);
+    color: #fff;
+    border-color: var(--purple);
+}
+
+.module-button-training {
+    background: #fff1cf;
+    border-color: #e5c06a;
+}
+
+.module-button-training:hover {
+    background: #ffe7b1;
+}
+
+.module-button-training.selected {
+    background: #d99a2b;
+    color: #fff;
+    border-color: #c28419;
+}
+
+.start-button-training {
+    background: #d99a2b !important;
+    border-color: #c28419 !important;
+    color: #fff !important;
+}
+
+.start-button-training:hover:not(:disabled) {
+    background: #c28419 !important;
+    border-color: #b37612 !important;
+}
+
+
+.module-button-all {
+    grid-column: 1 / -1;
+    width: calc(50% - 6px);
+    justify-self: center;
+}
+
+.custom-choice-grid {
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: 4px;
+    margin: 4px 0 0;
+}
+
+.custom-choice-group {
+    margin: 0;
+}
+
+.custom-choice-group h4 {
+    margin: 0 0 8px;
+    color: var(--purple);
+    text-align: left;
+    font-size: .98rem;
+}
+
+.custom-choice {
+    min-height: 34px;
+    min-width: 0;
+    margin: 0;
+    padding: 4px 7px;
+    background: var(--purple-soft);
+    color: var(--purple-dark);
+    border: 2px solid #cbc8dd;
+    border-radius: 8px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.custom-choice:hover {
+    background: #ebe8fb;
+}
+
+.custom-choice.selected {
+    background: var(--purple);
+    color: #fff;
+    border-color: var(--purple);
+}
+
+.custom-selection-scroll {
+    max-height: none;
+    overflow: visible;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.custom-set-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    min-height: 36px;
+    background: #ebeaf4;
+    border: 2px solid #cbc8dd;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.custom-set-toggle {
+    width: 100%;
+    min-height: 36px;
+    margin: 0;
+    padding: 6px 12px 6px 14px;
+    text-align: left;
+    background: transparent;
+    color: var(--purple);
+    border: 0;
+    border-radius: 0;
+    font-weight: 700;
+}
+
+.custom-set-toggle:hover {
+    background: rgba(46, 41, 125, 0.06);
+}
+
+.custom-set-toggle::after {
+    content: "▾";
+    float: right;
+    margin-left: 10px;
+    transition: transform 160ms ease;
+}
+
+.custom-choice-group.collapsed .custom-set-toggle::after {
+    transform: rotate(-90deg);
+}
+
+.custom-select-all-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 36px;
+    margin: 0;
+    padding: 0 12px 0 10px;
+    color: var(--purple);
+    font-size: .82rem;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+    border-left: 1px solid rgba(46, 41, 125, 0.13);
+}
+
+.custom-select-all-inline:hover {
+    background: rgba(46, 41, 125, 0.06);
+}
+
+.custom-select-all-checkbox {
+    width: 17px;
+    height: 17px;
+    margin: 0;
+    accent-color: var(--purple);
+    cursor: pointer;
+}
+
+.custom-set-panel {
+    padding-top: 4px;
+}
+
+.custom-choice-group.collapsed .custom-set-panel {
+    display: none;
+}
+
+.menu-stage {
+    position: relative;
+    min-height: 350px;
+    height: 350px;
+    margin: 12px 0 0;
+    overflow: visible;
+    overflow-anchor: none;
+}
+
+.menu-view {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    margin: 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(5px);
+    transition:
+        opacity 180ms ease,
+        transform 180ms ease,
+        visibility 0s linear 180ms;
+}
+
+.menu-view.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+    transition:
+        opacity 180ms ease,
+        transform 180ms ease,
+        visibility 0s;
+}
+
+#mainModuleGrid {
+    align-content: start;
+    padding-top: 6px;
+}
+
+#subMenuArea .module-grid {
+    margin-bottom: 0;
+}
+
+.sub-menu-area {
+    padding-top: 4px;
+    border-top: none;
+}
+
+.sub-menu-title {
+    text-align: center;
+    color: var(--purple);
+    margin: 10px 0 14px;
+}
+
+.module-title {
+    display: block;
+    font-weight: 750;
+    font-size: 1rem;
+}
+
+.module-subtitle {
+    display: block;
+    margin-top: 4px;
+    font-size: .84rem;
+    opacity: .85;
+}
+
+.button-area {
+    text-align: center;
+    margin: 12px 0;
+}
+
+#startArea {
+    position: relative;
+}
+
+/* Einheitlicher Footer in allen Auswahlansichten:
+   Text und Hauptbutton sitzen in Hauptmenü und eigener Auswahl pixelgleich. */
+#startArea .selection-footer {
+    position: absolute;
+    left: 20px;
+    right: 20px;
+    bottom: 34px;
+    width: auto;
+    max-width: none;
+    height: 126px;
+    min-height: 126px;
+    margin: 0;
+    transform: none;
+    display: grid;
+    grid-template-rows: 68px 58px;
+    justify-items: center;
+    align-items: start;
+    z-index: 8;
+}
+
+#startArea #selectionInfo {
+    width: 100%;
+    height: 68px;
+    min-height: 68px;
+    margin: 0;
+    padding: 0;
+    line-height: 1.3;
+    text-align: center;
+    display: block;
+}
+
+#startArea #selectionInfo .selection-hint {
+    margin-top: 4px;
+}
+
+#startArea .selection-footer .button-area {
+    width: 100%;
+    height: 58px;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+#startArea #startButton {
+    margin: 0;
+}
+
+#startArea.custom-selection-active .selection-footer,
+#startArea:not(.custom-selection-active) .selection-footer {
+    margin: 0;
+    transform: none;
+}
+
+#startArea.custom-selection-active #menuStage {
+    min-height: 252px;
+    height: 252px;
+    transition: none;
+}
+
+
+#startArea.custom-selection-active .custom-choice,
+#startArea.custom-selection-active .custom-set-toggle {
+    transition: background-color 100ms ease, border-color 100ms ease, color 100ms ease;
+}
+
+.startmenu-area {
+    position: absolute;
+    left: 16px;
+    bottom: 14px;
+    display: flex;
+}
+
+.startmenu-button {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: #67617f;
+    border: 2px solid #bcb7d0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: none;
+}
+
+.startmenu-button:hover {
+    background: rgba(103, 97, 127, 0.08);
+}
+
+#exerciseArea.training-theme .startmenu-button {
+    color: #b77814;
+    border-color: #e5c06a;
+    background: transparent;
+}
+
+#exerciseArea.training-theme .startmenu-button:hover {
+    background: rgba(217, 154, 43, 0.10);
+}
+
+.startmenu-button .home-icon {
+    font-size: 1.22rem;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.selection-footer .instruction {
+    min-height: 34px;
+    margin: 10px 0 4px;
+}
+
+.selection-hint {
+    display: inline-block;
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: .96em;
+}
+
+button {
+    font: inherit;
+    font-size: 1rem;
+    padding: 11px 18px;
+    margin: 5px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--purple);
+    color: #fff;
+    cursor: pointer;
+}
+
+button:hover { background: var(--purple-dark); }
+
+button:focus-visible {
+    outline: 3px solid #ffbf47;
+    outline-offset: 3px;
+}
+
+button:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+}
+
+
+
+.app-stage {
+    position: relative;
+    min-height: calc(var(--view-top) + var(--view-height));
+    height: calc(var(--view-top) + var(--view-height));
+    overflow: visible;
+    overflow-anchor: none;
+    transition: height 120ms ease-out;
+}
+
+body.exercise-active .app-stage {
+    min-height: calc(var(--view-top) + var(--view-height));
+    height: calc(var(--view-top) + var(--view-height));
+    transition: none;
+}
+
+.app-view {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(4px);
+    transition:
+        opacity 160ms ease,
+        transform 160ms ease,
+        visibility 0s linear 160ms;
+}
+
+.app-view.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+    transition:
+        opacity 160ms ease,
+        transform 160ms ease,
+        visibility 0s;
+}
+
+#startArea,
+#exerciseArea {
+    position: absolute;
+    top: var(--view-top);
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: var(--view-height);
+    margin: 0;
+    box-sizing: border-box;
+}
+
+#startArea {
+    padding: 16px 20px 14px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+#startArea h2,
+#startArea .selection-footer,
+#startArea #menuStage {
+    width: 100%;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#exerciseArea {
+    max-width: none;
+    padding: 0;
+}
+
+#startArea h2 {
+    margin-bottom: 18px;
+}
+
+#startArea .selection-footer {
+    align-items: center;
+}
+
+#startArea .selection-footer .instruction,
+#startArea .button-area,
+#startArea .sub-menu-area,
+#startArea .sub-menu-title {
+    text-align: center;
+}
+
+#startArea .module-grid {
+    justify-items: stretch;
+}
+
+#startArea .module-button {
+    width: auto;
+}
+
+#startArea .module-button-all {
+    width: 50%;
+    min-width: 280px;
+}
+
+.progress {
+    text-align: center;
+    font-weight: 650;
+    color: #555;
+    margin: 0 0 6px;
+    flex-shrink: 0;
+}
+
+#exerciseArea.training-theme .progress {
+    width: fit-content;
+    margin: 20px auto;
+    padding: 10px 18px;
+    border-radius: 999px;
+    border: 2px solid #e5c06a;
+    background: #fff7e3;
+    color: #8f6215;
+    box-shadow: 0 2px 8px rgba(217, 154, 43, 0.10);
+    transition:
+        background 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease,
+        box-shadow 160ms ease,
+        transform 160ms ease;
+}
+
+#exerciseArea.training-theme .progress.streak-10 {
+    background: #ffe6b2;
+    border-color: #d99a2b;
+    color: #8a5a11;
+    box-shadow: 0 4px 12px rgba(217, 154, 43, 0.18);
+    font-weight: 760;
+}
+
+#exerciseArea.training-theme .progress.streak-50 {
+    background: #ffd98c;
+    border-color: #cf8a15;
+    color: #7b4f08;
+    box-shadow: 0 6px 16px rgba(207, 138, 21, 0.24);
+    font-weight: 800;
+    transform: scale(1.02);
+}
+
+#exerciseArea.training-theme .progress.streak-100 {
+    background: linear-gradient(180deg, #ffd06a 0%, #f0b13f 100%);
+    border-color: #b87410;
+    color: #5f3904;
+    box-shadow: 0 8px 20px rgba(184, 116, 16, 0.28);
+    font-weight: 820;
+    transform: scale(1.04);
+}
+
+.writer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 18px 16px 56px;
+    background: #faf9ff;
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.writer-instruction, .keyboard-help {
+    text-align: center;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.writer-instruction {
+    margin: 0 0 8px;
+    flex-shrink: 0;
+}
+
+.keyboard-help {
+    margin: 8px 0 0;
+    flex-shrink: 0;
+}
+
+.paper {
+    margin: 20px auto 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 132px;
+    height: 132px;
+    flex-shrink: 0;
+}
+
+.cell-row {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    min-height: 132px;
+    height: 132px;
+}
+
+.cell-wrap {
+    text-align: center;
+}
+
+.cell-wrap.placeholder {
+    opacity: 0.78;
+}
+
+.braille-cell {
+    display: grid;
+    grid-template-columns: 40px 40px;
+    grid-template-rows: 40px 40px 40px;
+    gap: 6px 14px;
+}
+
+.dot {
+    width: 30px;
+    height: 30px;
+    margin: auto;
+    border-radius: 50%;
+    background: #eeeae0;
+    border: 2px solid #d0ccc2;
+    box-shadow: none;
+}
+
+.dot.active {
+    background: var(--purple);
+    border-color: var(--purple);
+    box-shadow: 0 3px 5px rgba(0,0,0,.22);
+    transform: translateY(-2px);
+}
+
+.dot.solution-dot {
+    background: #f7eef3;
+    border-color: #e5a9c3;
+    box-shadow: 0 0 0 4px rgba(229, 169, 195, 0.24);
+    transform: none;
+}
+
+.dot.solution-dot.active {
+    background: #e5a9c3;
+    border-color: #d98fad;
+    box-shadow: none;
+    transform: none;
+}
+
+.cell-number {
+    display: none;
+}
+
+.empty-input {
+    color: #777;
+    text-align: center;
+}
+
+.unicode-output {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 34px;
+    min-height: 34px;
+    margin: 12px auto 12px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 1.35rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.unicode-output .entered-code {
+    display: inline-block;
+    line-height: 1.2;
+    text-align: center;
+    color: var(--purple);
+}
+
+.unicode-output .solution-code {
+    display: inline-block;
+    line-height: 1.2;
+    text-align: center;
+    color: #d98aab;
+    font-weight: 800;
+    text-shadow: 0 0 3px rgba(217, 138, 171, 0.12);
+}
+
+.unicode-output .solution-braille-display {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #e5a9c3;
+    line-height: 1;
+}
+
+.unicode-output .solution-braille-cell {
+    position: relative;
+    width: 42px;
+    height: 54px;
+    display: block;
+    margin: 0 auto;
+    transform: translateX(3px);
+}
+
+.unicode-output .solution-braille-dot {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.unicode-output .solution-braille-dot.dot-1 { left: 0; top: 0; }
+.unicode-output .solution-braille-dot.dot-2 { left: 0; top: 21px; }
+.unicode-output .solution-braille-dot.dot-3 { left: 0; top: 42px; }
+.unicode-output .solution-braille-dot.dot-4 { left: 22px; top: 0; }
+.unicode-output .solution-braille-dot.dot-5 { left: 22px; top: 21px; }
+.unicode-output .solution-braille-dot.dot-6 { left: 22px; top: 42px; }
+
+.keyboard-label {
+    text-align: center;
+    font-weight: 650;
+    margin: 18px 0 8px;
+}
+
+.braille-keyboard {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 7px;
+    flex-wrap: nowrap;
+    margin: 0 auto 6px;
+    flex-shrink: 0;
+}
+
+.braille-key {
+    width: 60px;
+    height: 68px;
+    padding: 6px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #ebeaf4;
+    color: #222;
+    border: 2px solid #cbc8dd;
+    border-radius: 10px;
+    user-select: none;
+    touch-action: none;
+}
+
+.braille-key:hover { background: #dfddeb; }
+
+.braille-key.pressed {
+    background: var(--purple);
+    color: #fff;
+    border-color: var(--purple);
+    transform: translateY(3px);
+}
+
+
+.braille-key.hint-key {
+    background: #f1d4e0;
+    color: #3a3140;
+    border-color: #e5a9c3;
+    box-shadow: 0 0 0 3px rgba(229, 169, 195, 0.22);
+    transform: translateY(3px);
+}
+
+.braille-key.solution-key {
+    background: #f7eef3;
+    color: #222;
+    border-color: #e5a9c3;
+    box-shadow: 0 0 0 3px rgba(229, 169, 195, 0.22);
+    transform: none;
+}
+
+.key-letter { font-size: 1.1rem; font-weight: 750; }
+.key-dot { font-size: .75rem; margin-top: 3px; }
+.keyboard-divider { width: 24px; }
+
+#audioButtonArea {
+    position: absolute;
+    right: 16px;
+    bottom: 14px;
+    margin: 0;
+    z-index: 6;
+}
+
+.audio-corner-button {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    margin: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: #67617f;
+    border: 2px solid #bcb7d0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: none;
+    font-size: 1.05rem;
+}
+
+.audio-corner-button:hover {
+    background: rgba(103, 97, 127, 0.08);
+}
+
+.feedback {
+    position: absolute;
+    left: 50%;
+    bottom: 68px;
+    transform: translateX(-50%);
+    z-index: 5;
+    visibility: hidden;
+    width: fit-content;
+    max-width: min(calc(100% - 120px), 440px);
+    min-height: 42px;
+    margin: 0;
+    padding: 8px 18px;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.08rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.2;
+    overflow: hidden;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+.feedback.correct {
+    visibility: visible;
+    background: #eef8f1;
+    border-color: #b7dcc2;
+    color: #3e9b62;
+}
+
+.feedback.wrong {
+    visibility: visible;
+    background: #f8eef3;
+    border-color: #e5a9c3;
+    color: #d88fb1;
+}
+
+.feedback.solution-feedback {
+    font-size: 1.05rem;
+    line-height: 1.2;
+    letter-spacing: 0;
+}
+
+#solution {
+    display: none !important;
+}
+
+.solution-braille,
+.solution-name {
+    display: none;
+}
+
+#solutionButtonArea {
+    position: absolute;
+    left: 50%;
+    bottom: 10px;
+    transform: translateX(-50%);
+    z-index: 5;
+    min-height: 44px;
+    margin: 0;
+    visibility: hidden;
+}
+
+#solutionButtonArea.visible {
+    visibility: visible;
+}
+
+
+
+/* Verhindert zusätzlich Scroll-Sprünge durch Browser-Scroll-Anchoring */
+.writer,
+.feedback,
+#solutionButtonArea,
+#solution {
+    overflow-anchor: none;
+}
+
+.difficult-signs-panel {
+    display: none;
+    width: min(100%, 540px);
+    min-height: 260px;
+    margin: 10px auto 12px;
+    padding: 18px 20px 16px;
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    background: var(--purple-soft);
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(46, 41, 125, 0.08);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.difficult-signs-panel.visible {
+    display: flex;
+}
+
+.difficult-signs-title {
+    margin: 0 0 14px;
+    color: var(--purple);
+    font-weight: 750;
+    font-size: 1.18rem;
+}
+
+.completion-success-icon {
+    display: none;
+    font-size: 2.4rem;
+    line-height: 1;
+    margin-bottom: 12px;
+}
+
+.completion-success-text {
+    display: none;
+    margin: -4px 0 18px;
+    color: var(--muted);
+    font-size: 1rem;
+}
+
+.difficult-signs-panel.success-state {
+    background: linear-gradient(180deg, #f8f7ff 0%, #efedff 100%);
+    border-color: #c8c3e7;
+}
+
+.difficult-signs-panel.success-state .completion-success-icon,
+.difficult-signs-panel.success-state .completion-success-text {
+    display: block;
+}
+
+.difficult-signs-panel.success-state .difficult-signs-title {
+    font-size: 1.34rem;
+    margin-bottom: 10px;
+}
+
+.difficult-signs-panel.success-state .difficult-signs-list {
+    display: none;
+}
+
+.difficult-signs-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 0 0 18px;
+}
+
+.difficult-sign-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 42px;
+    min-height: 38px;
+    padding: 6px 11px;
+    border: 2px solid #cbc8dd;
+    border-radius: 999px;
+    background: #fff;
+    color: var(--purple-dark);
+    font-weight: 700;
+}
+
+.difficult-train-button {
+    margin-top: 4px;
+}
+
+.difficult-signs-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.difficult-signs-actions button {
+    min-width: 220px;
+    margin: 0;
+}
+
+#exerciseArea.completion-view .progress,
+#exerciseArea.completion-view #audioButtonArea,
+#exerciseArea.completion-view .writer-instruction,
+#exerciseArea.completion-view .paper,
+#exerciseArea.completion-view .unicode-output,
+#exerciseArea.completion-view .keyboard-label,
+#exerciseArea.completion-view .braille-keyboard,
+#exerciseArea.completion-view .keyboard-help,
+#exerciseArea.completion-view .feedback,
+#exerciseArea.completion-view #solutionButtonArea,
+#exerciseArea.completion-view #solution,
+#exerciseArea.completion-view #status,
+#exerciseArea.completion-view #nextButtonArea,
+#exerciseArea.completion-view .startmenu-area {
+    display: none !important;
+}
+
+#exerciseArea.completion-view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 500px;
+}
+
+#exerciseArea.completion-view .writer {
+    width: 100%;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: 0;
+}
+
+#exerciseArea.completion-view .difficult-signs-panel {
+    display: flex;
+    width: min(100%, 540px);
+    min-height: 330px;
+    margin: 0 auto;
+}
+
+.status {
+    min-height: 1.5em;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    font-weight: 650;
+}
+
+.secondary { background: #67617f; }
+.secondary:hover { background: #514c66; }
+
+#exerciseArea.training-theme .writer {
+    background: #fffaf1;
+    border-color: #ead19d;
+    box-shadow: inset 0 0 0 1px rgba(229, 192, 106, 0.18);
+}
+
+#exerciseArea.training-theme .writer-instruction,
+#exerciseArea.training-theme .keyboard-help,
+#exerciseArea.training-theme .keyboard-label,
+#exerciseArea.training-theme .status {
+    color: #6f572a;
+}
+
+#exerciseArea.training-theme .braille-key {
+    background: #f7f0de;
+    color: #6f572a;
+    border-color: #e3cf9d;
+}
+
+#exerciseArea.training-theme .braille-key:hover {
+    background: #f2e5c0;
+}
+
+#exerciseArea.training-theme .dot.active {
+    background: #d99a2b;
+    border-color: #c28419;
+    box-shadow: 0 3px 5px rgba(194, 132, 25, .24);
+}
+
+#exerciseArea.training-theme .unicode-output .entered-code {
+    color: #b77911;
+}
+
+#exerciseArea.training-theme .unicode-output .solution-code {
+    color: #d99a2b;
+}
+
+#exerciseArea.training-theme .unicode-output .solution-braille-display {
+    color: #d99a2b;
+}
+
+#exerciseArea.training-theme .braille-key.pressed {
+    background: #d99a2b;
+    color: #fff;
+    border-color: #c28419;
+}
+
+#exerciseArea.training-theme .braille-key.hint-key {
+    background: #ffe7b6;
+    color: #6a4912;
+    border-color: #d99a2b;
+    box-shadow: 0 0 0 3px rgba(217, 154, 43, 0.22);
+    transform: translateY(3px);
+}
+
+#exerciseArea.training-theme .braille-key.solution-key {
+    background: #fff4de;
+    color: #6a4912;
+    border-color: #e5c06a;
+    box-shadow: 0 0 0 3px rgba(229, 192, 106, 0.20);
+    transform: none;
+}
+
+#exerciseArea.training-theme .feedback.wrong {
+    background: #fff4de;
+    border-color: #e5c06a;
+    color: #b77911;
+}
+
+#exerciseArea.training-theme .feedback.correct {
+    background: #fff4de;
+    border-color: #e5c06a;
+    color: #b77911;
+}
+
+#exerciseArea.training-theme .feedback {
+    bottom: 18px;
+    max-width: min(calc(100% - 160px), 360px);
+}
+
+#exerciseArea.training-theme #solutionButtonArea {
+    visibility: hidden !important;
+}
+
+#exerciseArea.training-theme .button-area > button:not(.secondary):not(.audio-corner-button),
+#exerciseArea.training-theme #nextButtonArea > button:not(.secondary) {
+    background: #d99a2b;
+}
+
+#exerciseArea.training-theme .button-area > button:not(.secondary):not(.audio-corner-button):hover,
+#exerciseArea.training-theme #nextButtonArea > button:not(.secondary):hover {
+    background: #c28419;
+}
+
+#exerciseArea.training-theme #audioButtonArea > .audio-corner-button {
+    background: transparent;
+    color: #b77814;
+    border: 2px solid #e5c06a;
+    box-shadow: none;
+}
+
+#exerciseArea.training-theme #audioButtonArea > .audio-corner-button:hover {
+    background: rgba(217, 154, 43, 0.10);
+}
+
+
+@media (max-width: 650px) {
+    :root { --view-height: 612px; }
+    .app-stage { min-height: calc(var(--view-top) + var(--view-height)); height: calc(var(--view-top) + var(--view-height)); }
+    body.exercise-active .app-stage { min-height: calc(var(--view-top) + var(--view-height)); height: calc(var(--view-top) + var(--view-height)); }
+    body { padding: 10px; }
+    .container { padding: 20px 12px; }
+    .module-grid { grid-template-columns: 1fr; }
+    .custom-choice-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .custom-set-toggle { padding: 11px 14px; }
+    .menu-stage { min-height: 520px; }
+    #startArea .module-button-all {
+        width: 100%;
+        min-width: 0;
+    }
+    .module-button-all { width: 100%; grid-column: 1; }
+    .writer { padding: 18px 8px; }
+    .braille-key { width: 50px; height: 70px; }
+    .keyboard-divider { width: 10px; }
+    .key-letter { font-size: 1rem; }
+    .key-dot { font-size: .7rem; }
+    .braille-cell {
+        grid-template-columns: 35px 35px;
+        grid-template-rows: 35px 35px 35px;
+        gap: 6px 14px;
+    }
+    .dot { width: 25px; height: 25px; }
+    .feedback {
+        max-width: 92%;
+        white-space: normal;
+        font-size: 1rem;
+        padding: 10px 16px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .menu-view,
+    .app-view,
+    .app-stage {
+        transition: none;
+        transform: none;
+    }
+}
+
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.menu-music-toggle {
+    position: absolute;
+    right: 16px;
+    left: auto;
+    bottom: 14px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: #67617f;
+    border: 2px solid #bcb7d0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: none;
+}
+
+.menu-music-toggle:hover {
+    background: rgba(103, 97, 127, 0.08);
+}
+
+.menu-music-toggle .music-icon {
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
+.menu-music-toggle.is-muted::after {
+    content: "";
+    position: absolute;
+    width: 24px;
+    height: 2.5px;
+    background: currentColor;
+    border-radius: 2px;
+    transform: rotate(-45deg);
+}
+
+#subMenuArea {
+    padding-bottom: 0;
+}
+
+.submenu-back-dock {
+    position: absolute;
+    left: 16px;
+    bottom: 14px;
+    z-index: 120;
+    display: flex;
+}
+
+#startArea.main-menu-active .submenu-back-dock {
+    display: none;
+}
+
+.menu-back-toggle {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: #67617f;
+    border: 2px solid #bcb7d0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: none;
+}
+
+.menu-back-toggle:hover {
+    background: rgba(103, 97, 127, 0.08);
+}
+
+.menu-back-toggle .back-icon {
+    font-size: 1.15rem;
+    line-height: 1;
+}
+
+.ai-credit {
+    position: absolute;
+    left: 14px;
+    right: auto;
+    top: 10px;
+    bottom: auto;
+    z-index: 100;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: #6f6f78;
+    opacity: 0.72;
+    letter-spacing: 0.03em;
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+}
+
+</style>
+</head>
+
+<body>
+<div class="container">
+
+
+<div id="appStage" class="app-stage">
+<div id="startArea" class="module-area app-view active main-menu-active">
+    <h2 id="startHeading">Zeichensatz wählen</h2>
+
+    
+
+<div id="menuStage" class="menu-stage">
+    <div id="mainModuleGrid" class="module-grid menu-view active" role="group" aria-label="Lernmodul auswählen">
+
+        <button class="module-button" type="button" data-module="1" onclick="selectModule('1', this)">
+            <span class="module-title">Zeichensatz 1</span>
+            <span class="module-subtitle">a–j · ch · ei · ie · GB · Komma · Punkt</span>
+        </button>
+
+        <button class="module-button" type="button" data-module="2" onclick="selectModule('2', this)">
+            <span class="module-title">Zeichensatz 2</span>
+            <span class="module-subtitle">k–t · sch · st · Zahlenzeichen · GW</span>
+        </button>
+
+        <button class="module-button" type="button" data-module="3" onclick="selectModule('3', this)">
+            <span class="module-title">Zeichensatz 3</span>
+            <span class="module-subtitle">u–z · ß · ä · ö · ü · au · äu · eu</span>
+        </button>
+
+        <button class="module-button" type="button" data-module="4" onclick="selectModule('4', this)">
+            <span class="module-title">Zeichensatz 4</span>
+            <span class="module-subtitle">übrige Satz- und Sonderzeichen</span>
+        </button>
+
+        <button class="module-button module-button-all" type="button" data-module="custom" onclick="selectModule('custom', this)">
+            <span class="module-title">Eigene Auswahl</span>
+            <span class="module-subtitle">baue den Zeichensatz selbst</span>
+        </button>
+
+    </div>
+
+    <div id="subMenuArea" class="sub-menu-area menu-view" aria-live="polite">
+        <h3 id="subMenuTitle" class="sub-menu-title" hidden aria-hidden="true"></h3>
+                <div id="subMenuGrid" class="module-grid"></div>
+    </div>
+</div>
+
+    <div class="selection-footer">
+        <p id="selectionInfo" class="instruction" aria-live="polite">
+            Noch keinen Zeichensatz ausgewählt.
+        </p>
+
+        <div class="button-area">
+            <button id="startButton" type="button" onclick="startExercise()" disabled>
+                Weiter
+            </button>
+        </div>
+
+    </div>
+
+    <div id="subMenuBackDock" class="submenu-back-dock">
+        <button id="subMenuBackButton" class="menu-back-toggle" type="button" onclick="closeSubMenu()" aria-label="Zurück" title="Zurück">
+            <span class="back-icon" aria-hidden="true">↩</span>
+            <span class="sr-only">Zurück</span>
+        </button>
+    </div>
+
+    <button id="musicToggleButton"
+            class="menu-music-toggle"
+            type="button"
+            onclick="toggleBackgroundMusic()"
+            aria-pressed="true"
+            aria-label="Hintergrundmusik ausschalten"
+            title="Hintergrundmusik ausschalten">
+        <span class="music-icon" aria-hidden="true">♫</span>
+        <span class="sr-only">Hintergrundmusik ausschalten</span>
+    </button>
+
+    <div class="ai-credit" aria-hidden="true">made with ai</div>
+</div>
+
+<div id="exerciseArea" class="app-view">
+
+    <section class="writer">
+
+        <div id="progress" class="progress" aria-live="polite"></div>
+
+        <p class="writer-instruction">
+            Bediene den Schreibtrainer wie eine Punktschriftmaschine.
+        </p>
+
+        <div id="difficultSignsPanel" class="difficult-signs-panel" aria-live="polite">
+            <div class="completion-success-icon" aria-hidden="true">✨</div>
+            <p id="difficultSignsTitle" class="difficult-signs-title">Hier könnte Wiederholung helfen:</p>
+            <p class="completion-success-text">Du konntest den Zeichensatz meistern!</p>
+            <div id="difficultSignsList" class="difficult-signs-list"></div>
+            <div class="difficult-signs-actions">
+                <button id="difficultTrainButton" class="difficult-train-button" type="button" onclick="practiceDifficultSigns()">
+                    Zeichen üben
+                </button>
+                <button type="button" onclick="startRound()">🔄 Noch eine Runde</button>
+                <button class="secondary" type="button" onclick="goToStartMenu()">🏡 Hauptmenü</button>
+            </div>
+        </div>
+
+        <div class="paper" aria-label="Geschriebene Braillezellen">
+            <div id="cellRow" class="cell-row">
+                <div class="empty-input">Noch keine Braillezelle geschrieben.</div>
+            </div>
+        </div>
+
+        <div id="unicodeOutput" class="unicode-output" aria-live="polite"
+             aria-label="Eingegebene Braillepunkte"></div>
+<div class="braille-keyboard" role="group" aria-label="Braille-Schreibtasten">
+            <button class="braille-key" data-key="s" data-dot="3" type="button">
+                <span class="key-letter">S</span><span class="key-dot">Punkt 3</span>
+            </button>
+            <button class="braille-key" data-key="d" data-dot="2" type="button">
+                <span class="key-letter">D</span><span class="key-dot">Punkt 2</span>
+            </button>
+            <button class="braille-key" data-key="f" data-dot="1" type="button">
+                <span class="key-letter">F</span><span class="key-dot">Punkt 1</span>
+            </button>
+
+            <div class="keyboard-divider"></div>
+
+            <button class="braille-key" data-key="j" data-dot="4" type="button">
+                <span class="key-letter">J</span><span class="key-dot">Punkt 4</span>
+            </button>
+            <button class="braille-key" data-key="k" data-dot="5" type="button">
+                <span class="key-letter">K</span><span class="key-dot">Punkt 5</span>
+            </button>
+            <button class="braille-key" data-key="l" data-dot="6" type="button">
+                <span class="key-letter">L</span><span class="key-dot">Punkt 6</span>
+            </button>
+        </div>
+
+        <p class="keyboard-help">
+            Tastaturbelegung: F = 1 · D = 2 · S = 3 · J = 4 · K = 5 · L = 6
+        </p>
+
+        <div class="button-area" id="audioButtonArea">
+            <button class="audio-corner-button" type="button" onclick="playAudio()" aria-label="Zeichen vorlesen" title="Zeichen vorlesen">
+                <span aria-hidden="true">🔊</span>
+                <span class="sr-only">Zeichen vorlesen</span>
+            </button>
+        </div>
+
+        <div id="feedback" class="feedback" aria-live="assertive"></div>
+
+        <div id="solutionButtonArea" class="button-area">
+            <button id="showSolutionButton" class="secondary" type="button" onclick="showSolution()" aria-label="Lösung anzeigen" title="Lösung anzeigen">
+    <svg class="solution-eye-icon" aria-hidden="true" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <path d="M32 8 L53 46 H11 Z" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linejoin="round"/>
+        <path d="M20 31 C25 24, 39 24, 44 31 C39 38, 25 38, 20 31 Z" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="32" cy="31" r="5.2" fill="currentColor"/>
+        <path d="M29 21 L32 16 L35 21" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M25 42 L32 48 L39 42" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+</button>
+        </div>
+
+        <div class="startmenu-area">
+            <button class="startmenu-button" type="button" onclick="goToStartMenu()" aria-label="Zum Startmenü" title="Zum Startmenü">
+                <span class="home-icon" aria-hidden="true">🏡</span>
+                <span class="sr-only">Zum Startmenü</span>
+            </button>
+        </div>
+    </section>
+    <div id="solution" aria-live="polite">
+        <strong>Die gesuchte Braille-Schreibweise lautet:</strong>
+        <div id="solutionBraille" class="solution-braille"></div>
+        <div id="solutionName" class="solution-name"></div>
+    </div>
+
+    <div id="status" class="status" aria-live="polite"></div>
+
+    <div class="button-area" id="nextButtonArea" style="display:none;">
+        <button id="nextButton" type="button" onclick="nextQuestion()">➡️ Nächstes Zeichen</button>
+    </div>
+
+
+</div>
+
+</div>
+
+<script>
+/*
+   ZEICHENSATZ-AUDIT:
+   Alle Punktmuster in modulePools wurden für diese Version erneut
+   gegen "Das System der deutschen Brailleschrift" (BSKDL, Textschrift/
+   Vollschrift) geprüft. Insbesondere:
+   eu = ⠣ = Punkte 1-2-6
+   offene runde Klammer = Punkte 2-3
+   geschlossene runde Klammer = Punkte 5-6
+*/
+/*
+    Jede Lösung besteht aus einer Liste von Braillezellen.
+    Eine Zelle ist wiederum eine Liste ihrer gesetzten Punkte.
+    Beispiel:
+      "a"  = [[1]]
+      "@"  = [[4], [3,4,5]]
+*/
+
+const modulePools = {
+
+    1: [
+        { name: "a", audio: "audio/m1_a.mp3", cells: [[1]] },                 // ⠁
+        { name: "b", audio: "audio/m1_b.mp3", cells: [[1,2]] },               // ⠃
+        { name: "c", audio: "audio/m1_c.mp3", cells: [[1,4]] },               // ⠉
+        { name: "d", audio: "audio/m1_d.mp3", cells: [[1,4,5]] },             // ⠙
+        { name: "e", audio: "audio/m1_e.mp3", cells: [[1,5]] },               // ⠑
+        { name: "f", audio: "audio/m1_f.mp3", cells: [[1,2,4]] },             // ⠋
+        { name: "g", audio: "audio/m1_g.mp3", cells: [[1,2,4,5]] },           // ⠛
+        { name: "h", audio: "audio/m1_h.mp3", cells: [[1,2,5]] },             // ⠓
+        { name: "i", audio: "audio/m1_i.mp3", cells: [[2,4]] },               // ⠊
+        { name: "j", audio: "audio/m1_j.mp3", cells: [[2,4,5]] },             // ⠚
+
+        // Lautgruppen – gemeinsam mit den zugehörigen Einzelbuchstaben eingeführt
+        { name: "ch", audio: "audio/m1_ch.mp3", cells: [[1,4,5,6]] },         // ⠹
+        { name: "ei", audio: "audio/m1_ei.mp3", cells: [[1,4,6]] },           // ⠩
+        { name: "ie (langes i)", audio: "audio/m1_ie.mp3", cells: [[3,4,6]] },// ⠬
+
+        // Großschreibung und erste Satzzeichen
+        { name: "GB (Großbuchstabenkennzeichen)", audio: "audio/m1_gb.mp3", cells: [[4,6]] }, // Punkte 46
+        { name: "Komma", audio: "audio/m1_komma.mp3", cells: [[2]] },         // ⠂
+        { name: "Punkt", audio: "audio/m1_punkt.mp3", cells: [[3]] }          // ⠄
+    ],
+
+    2: [
+        { name: "k", audio: "audio/m2_k.mp3", cells: [[1,3]] },               // ⠅
+        { name: "l", audio: "audio/m2_l.mp3", cells: [[1,2,3]] },             // ⠇
+        { name: "m", audio: "audio/m2_m.mp3", cells: [[1,3,4]] },             // ⠍
+        { name: "n", audio: "audio/m2_n.mp3", cells: [[1,3,4,5]] },           // ⠝
+        { name: "o", audio: "audio/m2_o.mp3", cells: [[1,3,5]] },             // ⠕
+        { name: "p", audio: "audio/m2_p.mp3", cells: [[1,2,3,4]] },           // ⠏
+        { name: "q", audio: "audio/m2_q.mp3", cells: [[1,2,3,4,5]] },         // ⠟
+        { name: "r", audio: "audio/m2_r.mp3", cells: [[1,2,3,5]] },           // ⠗
+        { name: "s", audio: "audio/m2_s.mp3", cells: [[2,3,4]] },             // ⠎
+        { name: "t", audio: "audio/m2_t.mp3", cells: [[2,3,4,5]] },           // ⠞
+
+        { name: "sch", audio: "audio/m2_sch.mp3", cells: [[1,5,6]] },         // ⠱
+        { name: "st", audio: "audio/m2_st.mp3", cells: [[2,3,4,5,6]] },       // ⠾
+        { name: "Zahlenzeichen", audio: "audio/m2_zahlenzeichen.mp3", cells: [[3,4,5,6]] }, // ⠼
+        { name: "GW (Großwortkennzeichen)", audio: "audio/m2_gw.mp3", cells: [[4,5]] }      // Punkte 45
+    ],
+
+    3: [
+        { name: "u", audio: "audio/m3_u.mp3", cells: [[1,3,6]] },             // ⠥
+        { name: "v", audio: "audio/m3_v.mp3", cells: [[1,2,3,6]] },           // ⠧
+        { name: "w", audio: "audio/m3_w.mp3", cells: [[2,4,5,6]] },           // ⠺
+        { name: "x", audio: "audio/m3_x.mp3", cells: [[1,3,4,6]] },           // ⠭
+        { name: "y", audio: "audio/m3_y.mp3", cells: [[1,3,4,5,6]] },         // ⠽
+        { name: "z", audio: "audio/m3_z.mp3", cells: [[1,3,5,6]] },           // ⠵
+
+        { name: "ß (scharfes Eszett)", audio: "audio/m3_sz.mp3", cells: [[2,3,4,6]] },      // ⠮
+        { name: "ä", audio: "audio/m3_ae.mp3", cells: [[3,4,5]] },            // ⠜
+        { name: "ö", audio: "audio/m3_oe.mp3", cells: [[2,4,6]] },            // ⠪
+        { name: "ü", audio: "audio/m3_ue.mp3", cells: [[1,2,5,6]] },          // ⠳
+
+        // Lautgruppen – gemeinsam mit den zugehörigen Einzelbuchstaben eingeführt
+        { name: "au", audio: "audio/m3_au.mp3", cells: [[1,6]] },             // ⠡
+        { name: "äu", audio: "audio/m3_aeu_mit_ae.mp3", cells: [[3,4]] },      // ⠌
+        { name: "eu", audio: "audio/m3_eu_mit_e.mp3", cells: [[1,2,6]] }       // ⠣
+    ],
+
+    4: [
+        // Übrige Satz- und Sonderzeichen der deutschen Textschrift
+        { name: "Bindestrich", audio: "audio/m4_bindestrich.mp3", cells: [[3,6]] },       // ⠤
+        { name: "Ausrufezeichen", audio: "audio/m4_ausrufezeichen.mp3", cells: [[2,3,5]] },// ⠖
+        { name: "Fragezeichen", audio: "audio/m4_fragezeichen.mp3", cells: [[2,6]] },      // ⠢
+        { name: "Anführungszeichen am Anfang", audio: "audio/m4_anfuehrungszeichen_anfang.mp3", cells: [[2,3,6]] }, // ⠦
+        { name: "Anführungszeichen am Ende", audio: "audio/m4_anfuehrungszeichen_ende.mp3", cells: [[3,5,6]] },     // ⠴
+        { name: "Offene runde Klammer", audio: "audio/m4_klammer_auf.mp3", cells: [[2,3]] },           // Punkte 23
+        { name: "Geschlossene runde Klammer", audio: "audio/m4_klammer_zu.mp3", cells: [[5,6]] },       // Punkte 56
+        { name: "At-Zeichen", audio: "audio/m4_at.mp3", cells: [[4], [3,4,5]] },            // ⠈⠜
+        { name: "Raute / Nummernzeichen", audio: "audio/m4_raute.mp3", cells: [[4], [3,4,5,6]] }, // ⠈⠼
+        { name: "Eurozeichen", audio: "audio/m4_euro.mp3", cells: [[4], [1,5]] },            // ⠈⠑
+        { name: "Doppelpunkt", audio: "audio/m4_doppelpunkt.mp3", cells: [[2,5]] }           // ⠒
+    ]
+};
+
+let selectedModule = null;
+let selectedParentModule = null;
+let customPool = [];
+let customMode = null;
+let activePool = [];
+let remainingTasks = [];
+let currentTask = null;
+let number = 0;
+
+let inputCells = [];
+let pressedKeys = new Set();
+let chordDots = new Set();
+let chordCommitted = false;
+let keyVisualTimer = null;
+let wrongKeyTimer = null;
+let sequentialHintTimers = [];
+let solutionHintActive = false;
+let currentAudio = new Audio();
+currentAudio.preload = "auto";
+let taskAudioUnlocked = false;
+let feedbackAudio = null;
+let answerLocked = false;
+let difficultTasks = [];
+let correctStreak = 0;
+let trainingMode = false;
+let menuMusic = null;
+let backgroundMusic = null;
+let trainingMusic = null;
+let musicEnabled = true;
+let appResizeObserver = null;
+let renderedBrailleCellCount = -1;
+
+const keyToDot = { f:1, d:2, s:3, j:4, k:5, l:6 };
+const dotToKey = Object.fromEntries(Object.entries(keyToDot).map(([key, dot]) => [dot, key]));
+const brailleKeyButtons = Array.from(document.querySelectorAll(".braille-key"));
+const buttonByKey = Object.fromEntries(brailleKeyButtons.map(button => [button.dataset.key, button]));
+
+function observeActiveAppView() {
+    // Die Ansichten liegen im normalen Layoutfluss und benötigen keine
+    // laufende Höhenmessung mehr, auch nicht bei Fensteränderungen.
+    if (appResizeObserver) appResizeObserver.disconnect();
+    appResizeObserver = null;
+}
+
+let mainMenuStageHeight = 540;
+
+function updateAppStageHeight(viewId = null) {
+    const stage = document.getElementById("appStage");
+    if (!stage) return;
+    stage.style.removeProperty("height");
+}
+
+function showAppView(viewId) {
+    const start = document.getElementById("startArea");
+    const exercise = document.getElementById("exerciseArea");
+
+    start.classList.remove("active");
+    exercise.classList.remove("active");
+
+    document.getElementById(viewId).classList.add("active");
+    document.body.classList.toggle("exercise-active", viewId === "exerciseArea");
+
+    if (appResizeObserver && viewId === "exerciseArea") {
+        appResizeObserver.disconnect();
+    }
+
+    requestAnimationFrame(function() {
+        updateAppStageHeight(viewId);
+        if (viewId !== "exerciseArea") {
+            observeActiveAppView();
+        }
+    });
+}
+
+let exerciseHeightFrame = null;
+function refreshExerciseHeight() {
+    if (exerciseHeightFrame) return;
+    exerciseHeightFrame = requestAnimationFrame(function() {
+        exerciseHeightFrame = null;
+        const stage = document.getElementById("appStage");
+        const exercise = document.getElementById("exerciseArea");
+        if (!stage || !exercise) return;
+
+        stage.style.removeProperty("height");
+    });
+}
+
+function clearAllModuleSelections() {
+    document.querySelectorAll("#mainModuleGrid .module-button, #subMenuGrid .module-button").forEach(btn => {
+        btn.classList.remove("selected");
+        btn.setAttribute("aria-pressed", "false");
+    });
+}
+
+function updateStartButtonTheme() {
+    const startButton = document.getElementById("startButton");
+    if (!startButton) return;
+    startButton.classList.toggle(
+        "start-button-training",
+        Boolean(selectedModule && (selectedModule.startsWith("training-") || selectedModule === "custom-training"))
+    );
+}
+
+function setStartHeading(text) {
+    const heading = document.getElementById("startHeading");
+    if (heading) heading.textContent = text;
+}
+
+
+function markSelected(button) {
+    if (!button) return;
+    button.classList.add("selected");
+    button.setAttribute("aria-pressed", "true");
+}
+
+function fitMenuStageToActiveView() {
+    const menuStage = document.getElementById("menuStage");
+    if (!menuStage) return;
+    menuStage.style.removeProperty("height");
+}
+
+function setMenuMusicButtonVisible(visible) {
+    const button = document.getElementById("musicToggleButton");
+    if (!button) return;
+    button.style.display = visible ? "flex" : "none";
+}
+
+function showMainMenu() {
+    const main = document.getElementById("mainModuleGrid");
+    const sub = document.getElementById("subMenuArea");
+
+    document.getElementById("startArea").classList.remove("custom-mode-active");
+    setStartHeading("Zeichensatz wählen");
+    document.getElementById("startArea").classList.add("main-menu-active");
+    sub.classList.remove("active");
+    main.classList.add("active");
+    setMenuMusicButtonVisible(true);
+
+    requestAnimationFrame(function() {
+        fitMenuStageToActiveView();
+        updateAppStageHeight("startArea");
+    });
+}
+
+function closeSubMenu(resetInfo = true) {
+    document.getElementById("startArea").classList.remove("custom-selection-active");
+    showMainMenu();
+
+    document.getElementById("subMenuGrid").innerHTML = "";
+    const subMenuTitle = document.getElementById("subMenuTitle");
+        subMenuTitle.style.display = "block";
+    const backButton = document.getElementById("subMenuBackButton");
+    if (backButton) backButton.onclick = function() { closeSubMenu(); };
+
+    selectedModule = null;
+    selectedParentModule = null;
+    customPool = [];
+    customMode = null;
+    document.getElementById("startButton").disabled = true;
+    document.getElementById("startButton").textContent = "Weiter";
+    updateStartButtonTheme();
+
+    clearAllModuleSelections();
+
+    if (resetInfo) {
+        document.getElementById("selectionInfo").textContent =
+            "Noch keinen Zeichensatz ausgewählt.";
+    }
+}
+
+function displayTaskName(task) {
+    const labels = {
+        "Komma": ",",
+        "Punkt": ".",
+        "Zahlenzeichen": "Zahl",
+        "Bindestrich": "-",
+        "Ausrufezeichen": "!",
+        "Fragezeichen": "?",
+        "Anführungszeichen am Anfang": "„",
+        "Anführungszeichen am Ende": "“",
+        "Offene runde Klammer": "(",
+        "Geschlossene runde Klammer": ")",
+        "At-Zeichen": "@",
+        "Raute / Nummernzeichen": "#",
+        "Eurozeichen": "€",
+        "Doppelpunkt": ":"
+    };
+
+    if (labels[task.name]) return labels[task.name];
+
+    return task.name
+        .replace(" (Großbuchstabenkennzeichen)", "")
+        .replace(" (Großwortkennzeichen)", "")
+        .replace(" (langes i)", "")
+        .replace(" (scharfes Eszett)", "");
+}
+
+function getCustomPoolSummary() {
+    const count = customPool.length;
+    if (!count) return "";
+
+    const allTasks = [1, 2, 3, 4].flatMap(module => modulePools[module] || []);
+    const allSelected = count === allTasks.length &&
+        allTasks.every(task => customPool.includes(task));
+
+    if (allSelected) {
+        return "Alle Zeichen ausgewählt";
+    }
+
+    if (count <= 10) {
+        return "Ausgewählt: " + customPool.map(displayTaskName).join(" · ");
+    }
+
+    return count + " Zeichen ausgewählt";
+}
+
+function getCustomSelectionStatus() {
+    const count = customPool.length;
+    const allTasks = [1, 2, 3, 4].flatMap(module => modulePools[module] || []);
+    const allSelected = count === allTasks.length &&
+        allTasks.every(task => customPool.includes(task));
+
+    if (allSelected && count > 0) {
+        return '<strong>Alle Zeichen ausgewählt</strong>';
+    }
+
+    if (count === 0) {
+        return '<strong>0 Zeichen ausgewählt</strong><span class="selection-hint">Wähle mindestens zwei Zeichen.</span>';
+    }
+
+    if (count <= 10) {
+        const names = customPool.map(displayTaskName).join(" · ");
+        const hint = count < 2
+            ? '<span class="selection-hint">Wähle mindestens zwei Zeichen.</span>'
+            : '';
+        return '<strong>Ausgewählt: ' + names + '</strong>' + hint;
+    }
+
+    return '<strong>' + count + ' Zeichen ausgewählt</strong>';
+}
+
+
+function showCustomModeMenu() {
+    document.getElementById("startArea").classList.remove("main-menu-active");
+    document.getElementById("startArea").classList.remove("custom-selection-active");
+    document.getElementById("startArea").classList.add("custom-mode-active");
+    setMenuMusicButtonVisible(true);
+    setStartHeading("Lernmodus wählen");
+
+    const subMenuTitle = document.getElementById("subMenuTitle");
+        subMenuTitle.classList.remove("training-title");
+    subMenuTitle.style.display = "block";
+
+    const grid = document.getElementById("subMenuGrid");
+    grid.className = "module-grid";
+    grid.innerHTML = `
+        <button class="module-button" type="button" data-custom-mode="practice"
+                onclick="selectCustomMode('practice', this)">
+            <span class="module-title">Übung</span>
+        </button>
+        <button class="module-button module-button-training" type="button" data-custom-mode="training"
+                onclick="selectCustomMode('training', this)">
+            <span class="module-title">Training</span>
+        </button>
+    `;
+
+    selectedModule = null;
+    customMode = null;
+    document.getElementById("startButton").disabled = true;
+    document.getElementById("startButton").textContent = "Weiter";
+    document.getElementById("selectionInfo").textContent = getCustomPoolSummary();
+    updateStartButtonTheme();
+
+    const backButton = document.getElementById("subMenuBackButton");
+    if (backButton) backButton.onclick = function() { showCustomSelection(false); };
+
+    const main = document.getElementById("mainModuleGrid");
+    const sub = document.getElementById("subMenuArea");
+    main.classList.remove("active");
+    sub.classList.add("active");
+
+    requestAnimationFrame(function() {
+        fitMenuStageToActiveView();
+        updateAppStageHeight("startArea");
+    });
+}
+
+function selectCustomMode(mode, button) {
+    if (mode !== "practice" && mode !== "training") return;
+
+    document.querySelectorAll("#subMenuGrid .module-button").forEach(btn => {
+        btn.classList.remove("selected");
+        btn.setAttribute("aria-pressed", "false");
+    });
+    markSelected(button);
+
+    customMode = mode;
+    selectedModule = "custom-" + mode;
+    updateStartButtonTheme();
+
+    startExercise();
+}
+
+function showCustomSelection(resetPool = true) {
+    document.getElementById("startArea").classList.remove("main-menu-active");
+    document.getElementById("startArea").classList.remove("custom-mode-active");
+    document.getElementById("startArea").classList.add("custom-selection-active");
+    setMenuMusicButtonVisible(true);
+    setStartHeading("Baue den Zeichensatz selbst!");
+
+    const subMenuTitle = document.getElementById("subMenuTitle");
+    subMenuTitle.textContent = "";
+    subMenuTitle.classList.remove("training-title");
+    subMenuTitle.style.display = "none";
+
+    const grid = document.getElementById("subMenuGrid");
+    grid.className = "";
+    grid.innerHTML = '<div class="custom-selection-scroll" id="customSelectionList"></div>';
+
+    const list = document.getElementById("customSelectionList");
+    for (let module = 1; module <= 4; module++) {
+        const group = document.createElement("section");
+        group.className = "custom-choice-group" + (module === 1 ? "" : " collapsed");
+
+        const header = document.createElement("div");
+        header.className = "custom-set-header";
+
+        const toggle = document.createElement("button");
+        toggle.type = "button";
+        toggle.className = "custom-set-toggle";
+        toggle.textContent = "Zeichensatz " + module;
+        toggle.setAttribute("aria-expanded", module === 1 ? "true" : "false");
+        toggle.onclick = function() {
+            toggleCustomGroup(group, toggle);
+        };
+        header.appendChild(toggle);
+
+        const selectAllLabel = document.createElement("label");
+        selectAllLabel.className = "custom-select-all-inline";
+
+        const selectAllCheckbox = document.createElement("input");
+        selectAllCheckbox.type = "checkbox";
+        selectAllCheckbox.className = "custom-select-all-checkbox";
+        selectAllCheckbox.dataset.module = String(module);
+        selectAllCheckbox.setAttribute("aria-label", "Gesamten Zeichensatz " + module + " auswählen");
+        selectAllCheckbox.onchange = function() {
+            toggleWholeCustomSet(module, selectAllCheckbox.checked);
+        };
+
+        const selectAllText = document.createElement("span");
+        selectAllText.textContent = "Alle wählen";
+
+        selectAllLabel.appendChild(selectAllCheckbox);
+        selectAllLabel.appendChild(selectAllText);
+        header.appendChild(selectAllLabel);
+        group.appendChild(header);
+
+        const panel = document.createElement("div");
+        panel.className = "custom-set-panel";
+
+        const choices = document.createElement("div");
+        choices.className = "custom-choice-grid";
+
+        const tasksForDisplay = module === 4
+            ? [0, 1, 2, 3, 4, 5, 6, 10, 7, 8, 9].map(i => ({ task: modulePools[module][i], index: i }))
+            : modulePools[module].map((task, index) => ({ task, index }));
+
+        tasksForDisplay.forEach(({ task, index }) => {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "custom-choice";
+            button.textContent = displayTaskName(task);
+            button.dataset.module = String(module);
+            button.dataset.index = String(index);
+            const isSelected = !resetPool && customPool.includes(task);
+            button.classList.toggle("selected", isSelected);
+            button.setAttribute("aria-pressed", isSelected ? "true" : "false");
+            button.onclick = function() {
+                toggleCustomTask(module, index, button);
+            };
+            choices.appendChild(button);
+        });
+
+        panel.appendChild(choices);
+        group.appendChild(panel);
+        list.appendChild(group);
+        updateWholeSetButton(module);
+    }
+
+    if (resetPool) customPool = [];
+    selectedModule = null;
+    customMode = null;
+    const startButton = document.getElementById("startButton");
+    startButton.disabled = customPool.length < 2;
+    startButton.textContent = "Weiter";
+    updateStartButtonTheme();
+    document.getElementById("selectionInfo").innerHTML = getCustomSelectionStatus();
+
+    const backButton = document.getElementById("subMenuBackButton");
+    if (backButton) backButton.onclick = function() { closeSubMenu(); };
+
+    const main = document.getElementById("mainModuleGrid");
+    const sub = document.getElementById("subMenuArea");
+    main.classList.remove("active");
+    sub.classList.add("active");
+
+    requestAnimationFrame(function() {
+        const menuStage = document.getElementById("menuStage");
+        const subArea = document.getElementById("subMenuArea");
+        if (menuStage) {
+            menuStage.style.height = "252px";
+        }
+        updateAppStageHeight("startArea");
+    });
+}
+
+function continueCustomSelection() {
+    if (customPool.length < 2) return;
+    showCustomModeMenu();
+}
+
+function toggleCustomGroup(group, toggleButton) {
+    const wasCollapsed = group.classList.contains("collapsed");
+
+    document.querySelectorAll("#customSelectionList .custom-choice-group").forEach(otherGroup => {
+        otherGroup.classList.add("collapsed");
+        const otherToggle = otherGroup.querySelector(".custom-set-toggle");
+        if (otherToggle) otherToggle.setAttribute("aria-expanded", "false");
+    });
+
+    if (wasCollapsed) {
+        group.classList.remove("collapsed");
+        toggleButton.setAttribute("aria-expanded", "true");
+    }
+
+    // Die Außenhöhe bleibt bewusst konstant, damit das Auf- und Zuklappen nicht springt.
+}
+
+function updateWholeSetButton(module) {
+    const checkbox = document.querySelector('.custom-select-all-checkbox[data-module="' + module + '"]');
+    if (!checkbox) return;
+
+    const tasks = modulePools[module] || [];
+    const allSelected = tasks.length > 0 && tasks.every(task => customPool.includes(task));
+    checkbox.checked = allSelected;
+}
+
+function updateAllWholeSetButtons() {
+    for (let module = 1; module <= 4; module++) {
+        updateWholeSetButton(module);
+    }
+}
+
+function toggleWholeCustomSet(module, shouldSelect) {
+    const tasks = modulePools[module] || [];
+
+    if (!shouldSelect) {
+        customPool = customPool.filter(task => !tasks.includes(task));
+    } else {
+        tasks.forEach(task => {
+            if (!customPool.includes(task)) customPool.push(task);
+        });
+    }
+
+    document.querySelectorAll('.custom-choice[data-module="' + module + '"]').forEach(choice => {
+        const index = Number(choice.dataset.index);
+        const task = modulePools[module][index];
+        const selected = customPool.includes(task);
+        choice.classList.toggle("selected", selected);
+        choice.setAttribute("aria-pressed", selected ? "true" : "false");
+    });
+
+    selectedModule = null;
+    customMode = null;
+    document.getElementById("startButton").disabled = customPool.length < 2;
+    document.getElementById("startButton").textContent = "Weiter";
+    document.getElementById("selectionInfo").innerHTML = getCustomSelectionStatus();
+
+    updateAllWholeSetButtons();
+    updateStartButtonTheme();
+}
+
+function toggleCustomTask(module, index, button) {
+    const task = modulePools[module][index];
+    const existingIndex = customPool.indexOf(task);
+
+    if (existingIndex >= 0) {
+        customPool.splice(existingIndex, 1);
+        button.classList.remove("selected");
+        button.setAttribute("aria-pressed", "false");
+    } else {
+        customPool.push(task);
+        button.classList.add("selected");
+        button.setAttribute("aria-pressed", "true");
+    }
+
+    selectedModule = null;
+    customMode = null;
+    document.getElementById("startButton").disabled = customPool.length < 2;
+    document.getElementById("startButton").textContent = "Weiter";
+    document.getElementById("selectionInfo").innerHTML = getCustomSelectionStatus();
+
+    updateWholeSetButton(module);
+    updateStartButtonTheme();
+}
+
+function showSubMenu(module) {
+    document.getElementById("startArea").classList.remove("main-menu-active");
+    document.getElementById("startArea").classList.remove("custom-selection-active");
+    document.getElementById("startArea").classList.remove("custom-mode-active");
+    setMenuMusicButtonVisible(false);
+    setStartHeading("Lernmodus wählen");
+    const moduleSubtitles = {
+        "1": "a–j · ch · ei · ie · GB · Komma · Punkt",
+        "2": "k–t · sch · st · Zahlenzeichen · GW",
+        "3": "u–z · ß · ä · ö · ü · au · äu · eu",
+        "4": "übrige Satz- und Sonderzeichen"
+    };
+
+    if (module === "custom") {
+        showCustomSelection(true);
+        return;
+    }
+
+    if (!moduleSubtitles[module]) return;
+
+    const subMenuTitle = document.getElementById("subMenuTitle");
+        subMenuTitle.classList.remove("training-title");
+    subMenuTitle.style.display = "block";
+
+    const grid = document.getElementById("subMenuGrid");
+    grid.className = "module-grid";
+    grid.innerHTML = `
+        <button class="module-button" type="button" data-module="practice-${module}"
+                onclick="selectSubModule('practice-${module}', this)">
+            <span class="module-title">Übung</span>
+        </button>
+        <button class="module-button module-button-training" type="button" data-module="training-${module}"
+                onclick="selectSubModule('training-${module}', this)">
+            <span class="module-title">Training</span>
+        </button>
+    `;
+
+    const main = document.getElementById("mainModuleGrid");
+    const sub = document.getElementById("subMenuArea");
+
+    main.classList.remove("active");
+    sub.classList.add("active");
+
+    requestAnimationFrame(function() {
+        fitMenuStageToActiveView();
+        updateAppStageHeight("startArea");
+    });
+}
+
+function selectSubModule(modeId, button) {
+    document.querySelectorAll("#subMenuGrid .module-button").forEach(btn => {
+        btn.classList.remove("selected");
+        btn.setAttribute("aria-pressed", "false");
+    });
+
+    markSelected(button);
+    selectedModule = modeId;
+    updateStartButtonTheme();
+
+    startExercise();
+}
+
+function selectModule(module, button) {
+    clearAllModuleSelections();
+    selectedParentModule = module;
+    selectedModule = null;
+
+    markSelected(button);
+
+    if (module === "custom") {
+        showCustomSelection(true);
+        return;
+    }
+
+    showSubMenu(module);
+    document.getElementById("startButton").disabled = true;
+    document.getElementById("startButton").textContent = "Weiter";
+    updateStartButtonTheme();
+    document.getElementById("selectionInfo").textContent = "";
+}
+
+function goToStartMenu() {
+    setCompletionView(false);
+    stopAudio();
+    stopFeedbackAudio();
+    stopBackgroundMusic();
+    stopTrainingMusic();
+    stopMenuMusic(true);
+
+    trainingMode = false;
+    applyExerciseTheme();
+    currentTask = null;
+    customPool = [];
+    customMode = null;
+    activePool = [];
+    remainingTasks = [];
+    difficultTasks = [];
+    number = 0;
+    correctStreak = 0;
+    answerLocked = false;
+    solutionHintActive = false;
+    document.querySelectorAll(".braille-key").forEach(button =>
+        button.classList.remove("hint-key")
+    );
+
+    clearInput(false);
+
+    showAppView("startArea");
+
+    closeSubMenu(true);
+
+    const nextArea = document.getElementById("nextButtonArea");
+    if (nextArea) nextArea.style.display = "none";
+
+    requestAnimationFrame(function() {
+        updateAppStageHeight("startArea");
+    });
+
+    syncMusicStateForCurrentView();
+}
+
+function startExercise() {
+    if (!selectedModule) {
+        if (selectedParentModule === "custom" && customPool.length >= 2) {
+            continueCustomSelection();
+        }
+        return;
+    }
+
+    if (selectedModule === "custom-practice" || selectedModule === "custom-training") {
+        if (customPool.length < 2) return;
+        trainingMode = (selectedModule === "custom-training");
+        activePool = [...customPool];
+    } else {
+        const [mode, moduleText] = selectedModule.split("-");
+        const module = Number(moduleText);
+        trainingMode = (mode === "training");
+
+        if (!Number.isInteger(module) || module < 1 || module > 4) return;
+
+        activePool = [...modulePools[module]];
+    }
+
+    stopMenuMusic(true);
+    applyExerciseTheme();
+    showAppView("exerciseArea");
+    updateMusicToggleButton();
+
+    syncMusicStateForCurrentView();
+
+    startRound();
+
+    requestAnimationFrame(function() {
+        updateAppStageHeight("exerciseArea");
+    });
+}
+
+function hideDifficultSignsPanel() {
+    const panel = document.getElementById("difficultSignsPanel");
+    const list = document.getElementById("difficultSignsList");
+    if (panel) panel.classList.remove("visible");
+    if (list) list.innerHTML = "";
+}
+
+function setCompletionView(active) {
+    const exerciseArea = document.getElementById("exerciseArea");
+    if (exerciseArea) exerciseArea.classList.toggle("completion-view", active);
+}
+
+function showDifficultSignsPanel() {
+    const panel = document.getElementById("difficultSignsPanel");
+    const list = document.getElementById("difficultSignsList");
+    const title = document.getElementById("difficultSignsTitle");
+    const trainButton = document.getElementById("difficultTrainButton");
+    if (!panel || !list || !title || !trainButton) return;
+
+    list.innerHTML = "";
+
+    if (difficultTasks.length > 0) {
+        panel.classList.remove("success-state");
+        title.textContent = "Hier könnte Wiederholung helfen:";
+        trainButton.style.display = "";
+        difficultTasks.forEach(task => {
+            const chip = document.createElement("span");
+            chip.className = "difficult-sign-chip";
+            chip.textContent = displayTaskName(task);
+            list.appendChild(chip);
+        });
+    } else {
+        panel.classList.add("success-state");
+        title.textContent = "Stark gemacht!";
+        trainButton.style.display = "none";
+    }
+
+    panel.classList.add("visible");
+}
+
+function practiceDifficultSigns() {
+    if (difficultTasks.length === 0) return;
+
+    activePool = [...difficultTasks];
+    trainingMode = false;
+    selectedModule = null;
+    setCompletionView(false);
+    hideDifficultSignsPanel();
+
+    stopTrainingMusic();
+    applyExerciseTheme();
+    syncMusicStateForCurrentView();
+    startRound();
+
+    requestAnimationFrame(function() {
+        updateAppStageHeight("exerciseArea");
+    });
+}
+
+function startRound() {
+    setCompletionView(false);
+    applyExerciseTheme();
+    number = 0;
+    correctStreak = 0;
+    hideDifficultSignsPanel();
+
+    if (trainingMode) {
+        remainingTasks = [];
+        document.getElementById("status").textContent = "";
+        document.getElementById("nextButtonArea").style.display = "none";
+    } else {
+        difficultTasks = [];
+        remainingTasks = [...activePool];
+        document.getElementById("status").textContent = "";
+        document.getElementById("nextButtonArea").style.display = "none";
+        document.getElementById("nextButton").textContent = "➡️ Nächstes Zeichen";
+        document.getElementById("nextButton").onclick = nextQuestion;
+    }
+
+    nextQuestion();
+}
+
+function nextQuestion() {
+    /*
+       Trainingsmodus:
+       zufällige Zeichen aus allen bis zum gewählten Zeichensatz gelernten Zeichen ohne Obergrenze.
+    */
+    if (trainingMode) {
+        answerLocked = false;
+        solutionHintActive = false;
+        document.querySelectorAll(".braille-key").forEach(button => {
+            button.classList.remove("hint-key");
+            button.classList.remove("solution-key");
+        });
+        clearInput(false);
+
+        if (!solutionHintActive) {
+        document.getElementById("solution").style.display = "none";
+        document.getElementById("showSolutionButton").style.display = "none";
+    }
+        document.getElementById("solutionButtonArea").classList.remove("visible");
+        document.getElementById("feedback").className = "feedback";
+        document.getElementById("feedback").textContent = "";
+        document.getElementById("status").textContent = "";
+
+        let nextTask;
+
+        if (activePool.length > 1 && currentTask) {
+            do {
+                nextTask = activePool[Math.floor(Math.random() * activePool.length)];
+            } while (nextTask === currentTask);
+        } else {
+            nextTask = activePool[Math.floor(Math.random() * activePool.length)];
+        }
+
+        currentTask = nextTask;
+        number++;
+
+        // Platzhalterzellen an die neue Aufgabe anpassen
+        updateBrailleDisplay();
+
+        setProgressText(
+            correctStreak === 0 ? "Beginne deine Streak!" : formatStreak(correctStreak)
+        );
+
+        playAudio();
+        return;
+    }
+
+    /*
+       Normaler Übungsmodus:
+       jedes Zeichen wird pro Runde genau einmal bearbeitet. Fehler werden
+       gesammelt und anschließend als freiwillige gezielte Übungsrunde angeboten.
+    */
+    if (remainingTasks.length === 0) {
+        stopAudio();
+        currentTask = null;
+        clearInput(false);
+
+        document.getElementById("solution").style.display = "none";
+    // Den eingegebenen Punktcode nicht löschen: updateBrailleDisplay() hat ihn
+    // gerade in Lila gesetzt. Nur der Lösungsbutton wird zurückgesetzt.
+    document.getElementById("showSolutionButton").style.display = "";
+        document.getElementById("solutionButtonArea").classList.remove("visible");
+        setProgressText("Alle " + activePool.length + " Zeichen bearbeitet.");
+        document.getElementById("status").textContent =
+            "Geschafft! Du hast alle Zeichen dieser Runde bearbeitet.";
+        document.getElementById("nextButtonArea").style.display = "none";
+        setCompletionView(true);
+        showDifficultSignsPanel();
+
+        requestAnimationFrame(function() {
+            updateAppStageHeight("exerciseArea");
+        });
+        return;
+    }
+
+    const index = Math.floor(Math.random() * remainingTasks.length);
+    currentTask = remainingTasks.splice(index, 1)[0];
+    number++;
+    answerLocked = false;
+
+    clearInput(false);
+
+    if (!solutionHintActive) {
+        document.getElementById("solution").style.display = "none";
+        document.getElementById("unicodeOutput").textContent = "";
+        document.getElementById("showSolutionButton").style.display = "";
+    }
+    document.getElementById("solutionButtonArea").classList.remove("visible");
+    document.getElementById("feedback").className = "feedback";
+    document.getElementById("feedback").textContent = "";
+    document.getElementById("status").textContent = "";
+
+    setProgressText("Aufgabe " + number + " von " + activePool.length);
+
+    document.getElementById("nextButtonArea").style.display = "none";
+    document.getElementById("nextButton").textContent =
+        "➡️ Nächstes Zeichen";
+    document.getElementById("nextButton").onclick = nextQuestion;
+
+    requestAnimationFrame(function() {
+        updateAppStageHeight("exerciseArea");
+    });
+
+    playAudio();
+}
+
+function stopAudio() {
+    if (!currentAudio) return;
+
+    currentAudio.pause();
+    try {
+        currentAudio.currentTime = 0;
+    } catch (error) {
+        // Some browsers do not allow seeking before metadata is available.
+    }
+}
+
+
+function stopFeedbackAudio() {
+    if (feedbackAudio) {
+        feedbackAudio.pause();
+        feedbackAudio.currentTime = 0;
+        feedbackAudio = null;
+    }
+}
+
+function playFeedbackAudio(type) {
+    stopFeedbackAudio();
+
+    const source = type === "correct"
+        ? "audio/feedback_richtig.wav"
+        : "audio/feedback_falsch.wav";
+
+    feedbackAudio = new Audio(source);
+    feedbackAudio.volume = 0.85;
+    feedbackAudio.play().catch(error => {
+        console.error("Auditory Icon konnte nicht abgespielt werden:", error);
+    });
+}
+
+
+function startMenuMusic() {
+    if (!musicEnabled) return;
+
+    const startArea = document.getElementById("startArea");
+    if (!startArea || !startArea.classList.contains("active")) return;
+
+    if (!menuMusic) {
+        menuMusic = new Audio();
+        menuMusic.src = "audio/menu_background.wav";
+        menuMusic.preload = "auto";
+        menuMusic.loop = true;
+        menuMusic.volume = 0.11;
+        menuMusic.load();
+    }
+
+    // Nicht neu starten, wenn die Musik bereits läuft.
+    if (!menuMusic.paused) return;
+
+    const playPromise = menuMusic.play();
+
+    if (playPromise !== undefined) {
+        playPromise.catch(error => {
+            console.warn("Hauptmenü-Musik startet noch nicht – erneuter Versuch nach Laden/Nutzerinteraktion:", error);
+
+            const retry = function() {
+                const currentStartArea = document.getElementById("startArea");
+                if (
+                    !musicEnabled ||
+                    !menuMusic ||
+                    !currentStartArea ||
+                    !currentStartArea.classList.contains("active")
+                ) return;
+
+                menuMusic.play().catch(retryError => {
+                    console.warn("Hauptmenü-Musik konnte noch nicht abgespielt werden:", retryError);
+                });
+            };
+
+            if (menuMusic.readyState >= 2) {
+                retry();
+            } else {
+                menuMusic.addEventListener("canplay", retry, { once: true });
+            }
+        });
+    }
+}
+
+function stopMenuMusic(reset = false) {
+    if (menuMusic) {
+        menuMusic.pause();
+        if (reset) menuMusic.currentTime = 0;
+    }
+}
+
+function startBackgroundMusic() {
+    if (trainingMode || !musicEnabled) return;
+
+    if (!backgroundMusic) {
+        backgroundMusic = new Audio("audio/module_background.wav");
+        backgroundMusic.loop = true;
+        backgroundMusic.volume = 0.13;
+    }
+
+    backgroundMusic.currentTime = 0;
+    backgroundMusic.play().catch(error => {
+        console.error("Hintergrundmusik konnte nicht abgespielt werden:", error);
+    });
+}
+
+function stopBackgroundMusic() {
+    if (backgroundMusic) {
+        backgroundMusic.pause();
+        backgroundMusic.currentTime = 0;
+    }
+}
+
+function startTrainingMusic() {
+    if (!trainingMode || !musicEnabled) return;
+
+    if (!trainingMusic) {
+        trainingMusic = new Audio("audio/training_background_energetic.wav");
+        trainingMusic.loop = true;
+        trainingMusic.volume = 0.18;
+    }
+
+    trainingMusic.currentTime = 0;
+    trainingMusic.play().catch(error => {
+        console.error("Hintergrundmusik konnte nicht abgespielt werden:", error);
+    });
+}
+
+function stopTrainingMusic() {
+    if (trainingMusic) {
+        trainingMusic.pause();
+        trainingMusic.currentTime = 0;
+    }
+}
+
+function syncMusicStateForCurrentView() {
+    const startArea = document.getElementById("startArea");
+    const inStartMenu = startArea && startArea.classList.contains("active");
+
+    // Zuerst immer sicherstellen, dass keine alte Spur weiterläuft.
+    stopMenuMusic(true);
+    stopBackgroundMusic();
+    stopTrainingMusic();
+
+    // Wenn Musik deaktiviert ist, bleibt alles stumm.
+    if (!musicEnabled) {
+        updateMusicToggleButton();
+        return;
+    }
+
+    // Sonst genau die zur aktuellen Ansicht passende Spur starten.
+    if (inStartMenu) {
+        startMenuMusic();
+    } else if (trainingMode) {
+        startTrainingMusic();
+    } else {
+        startBackgroundMusic();
+    }
+
+    updateMusicToggleButton();
+}
+
+function updateMusicToggleButton() {
+    const button = document.getElementById("musicToggleButton");
+    if (!button) return;
+
+    const label = musicEnabled
+        ? "Hintergrundmusik ausschalten"
+        : "Hintergrundmusik einschalten";
+
+    button.setAttribute("aria-pressed", musicEnabled ? "true" : "false");
+    button.setAttribute("aria-label", label);
+    button.setAttribute("title", label);
+    button.classList.toggle("is-muted", !musicEnabled);
+
+    const srText = button.querySelector(".sr-only");
+    if (srText) srText.textContent = label;
+}
+
+function toggleBackgroundMusic() {
+    musicEnabled = !musicEnabled;
+    syncMusicStateForCurrentView();
+}
+
+function formatStreak(streak) {
+    let flames = "";
+
+    if (streak >= 100) {
+        flames = "🔥🔥🔥 ";
+    } else if (streak >= 50) {
+        flames = "🔥🔥 ";
+    } else if (streak >= 10) {
+        flames = "🔥 ";
+    }
+
+    return flames + streak + "er Streak";
+}
+
+function applyExerciseTheme() {
+    const exerciseArea = document.getElementById("exerciseArea");
+    if (exerciseArea) {
+        exerciseArea.classList.toggle("training-theme", trainingMode);
+    }
+    document.body.classList.toggle("training-theme-global", trainingMode);
+}
+
+function updateSurvivalProgressDisplay() {
+    const progress = document.getElementById("progress");
+    if (!progress) return;
+
+    progress.classList.remove("streak-10", "streak-50", "streak-100");
+
+    if (!trainingMode) return;
+
+    if (correctStreak >= 100) {
+        progress.classList.add("streak-100");
+    } else if (correctStreak >= 50) {
+        progress.classList.add("streak-50");
+    } else if (correctStreak >= 10) {
+        progress.classList.add("streak-10");
+    }
+}
+
+function setProgressText(text) {
+    const progress = document.getElementById("progress");
+    if (!progress) return;
+    progress.textContent = text;
+    updateSurvivalProgressDisplay();
+}
+
+function playAudio() {
+    if (!currentTask || !currentTask.audio) return;
+
+    stopAudio();
+
+    const requestedSource = currentTask.audio;
+
+    // Das gleiche Audioelement wird für alle Zeichen weiterverwendet.
+    // Dadurch bleibt eine einmal durch Nutzerinteraktion freigegebene
+    // Audiositzung auch bei den folgenden Aufgaben erhalten.
+    if (currentAudio.getAttribute("src") !== requestedSource) {
+        currentAudio.src = requestedSource;
+    }
+
+    currentAudio.preload = "auto";
+
+    const playPromise = currentAudio.play();
+
+    if (playPromise && typeof playPromise.then === "function") {
+        playPromise
+            .then(function() {
+                taskAudioUnlocked = true;
+
+                // Eine frühere Browser-Autoplay-Meldung soll nicht im Layout stehen bleiben.
+                const status = document.getElementById("status");
+                if (status && status.dataset.audioNotice === "true") {
+                    status.textContent = "";
+                    delete status.dataset.audioNotice;
+                }
+            })
+            .catch(function(error) {
+                console.warn("Zeichen-Audio konnte nicht automatisch starten:", error);
+
+                // Kein großer Fehlertext mehr unterhalb des festen Rahmens.
+                // Der Lautsprecher bleibt jederzeit als manueller Fallback verfügbar.
+                const status = document.getElementById("status");
+                if (status) {
+                    status.textContent = "";
+                    delete status.dataset.audioNotice;
+                }
+            });
+    }
+}
+
+function dotsToBraille(dots) {
+    let value = 0;
+    dots.forEach(dot => value += Math.pow(2, dot - 1));
+    return String.fromCodePoint(0x2800 + value);
+}
+
+function dotsToPointNotation(dots) {
+    const sorted = [...dots].sort((a, b) => a - b);
+    return "P" + sorted.join("");
+}
+
+function cellKey(cell) {
+    return [...cell].sort((a,b) => a-b).join(",");
+}
+
+function commitChord() {
+    if (chordDots.size === 0 || answerLocked) return;
+
+    const cell = Array.from(chordDots).sort((a,b) => a-b);
+
+    // Alle Tasten des Chords bleiben nach dem Loslassen noch kurz sichtbar.
+    // Dadurch gehen bei leicht versetztem Loslassen keine Tasten optisch verloren.
+    showCommittedChord(cell);
+
+    inputCells.push(cell);
+    updateBrailleDisplay();
+
+    if (solutionHintActive && currentTask && !trainingMode) {
+        showSolutionHintStep();
+    }
+
+    const feedback = document.getElementById("feedback");
+    feedback.className = "feedback";
+    feedback.textContent = "";
+
+    document.getElementById("solution").style.display = "none";
+    if (!solutionHintActive) {
+        document.getElementById("showSolutionButton").style.display = "";
+    }
+
+    /*
+       Automatische Prüfung:
+       Sobald so viele Zellen eingegeben wurden, wie
+       die aktuelle Lösung benötigt, wird geprüft.
+    */
+    if (currentTask && inputCells.length >= currentTask.cells.length) {
+        checkAnswer();
+    }
+}
+
+/*
+   Die große Zelle zeigt das Punktmuster visuell.
+   Darunter wird dasselbe Muster als Punktnotation ausgegeben:
+   z. B. P1, P12 oder P13456.
+*/
+function ensureBrailleDisplayStructure(totalCount) {
+    const row = document.getElementById("cellRow");
+    if (!row) return;
+
+    if (totalCount === 0) {
+        if (renderedBrailleCellCount !== 0) {
+            row.innerHTML = '<div class="empty-input">Noch keine Braillezelle geschrieben.</div>';
+            renderedBrailleCellCount = 0;
+        }
+        return;
+    }
+
+    if (renderedBrailleCellCount === totalCount && row.children.length === totalCount) {
+        return;
+    }
+
+    const fragment = document.createDocumentFragment();
+    const dotOrder = [1,4,2,5,3,6];
+
+    for (let index = 0; index < totalCount; index++) {
+        const wrap = document.createElement("div");
+        wrap.className = "cell-wrap placeholder";
+
+        const brailleCell = document.createElement("div");
+        brailleCell.className = "braille-cell";
+
+        dotOrder.forEach(dot => {
+            const el = document.createElement("div");
+            el.className = "dot";
+            el.dataset.dot = String(dot);
+            brailleCell.appendChild(el);
+        });
+
+        const num = document.createElement("div");
+        num.className = "cell-number";
+        num.textContent = "Zelle " + (index + 1);
+
+        wrap.appendChild(brailleCell);
+        wrap.appendChild(num);
+        fragment.appendChild(wrap);
+    }
+
+    row.replaceChildren(fragment);
+    renderedBrailleCellCount = totalCount;
+}
+
+function updateBrailleDisplay() {
+    const row = document.getElementById("cellRow");
+    const expectedCount = currentTask ? currentTask.cells.length : 0;
+    const totalCount = Math.max(inputCells.length, expectedCount);
+
+    ensureBrailleDisplayStructure(totalCount);
+
+    if (totalCount === 0) {
+        document.getElementById("unicodeOutput").textContent = "";
+        return;
+    }
+
+    for (let index = 0; index < totalCount; index++) {
+        const cell = inputCells[index] || [];
+        const isPlaceholder = index >= inputCells.length;
+        const wrap = row.children[index];
+        if (!wrap) continue;
+
+        wrap.classList.toggle("placeholder", isPlaceholder);
+        const brailleCell = wrap.querySelector(".braille-cell");
+        if (!brailleCell) continue;
+
+        brailleCell.setAttribute(
+            "aria-label",
+            isPlaceholder
+                ? "Leere Braillezelle " + (index + 1)
+                : "Braillezelle " + (index + 1) + ", Punkte " + cell.join(", ")
+        );
+
+        brailleCell.querySelectorAll(".dot").forEach(dotEl => {
+            const dot = Number(dotEl.dataset.dot);
+            dotEl.classList.toggle("active", cell.includes(dot));
+            dotEl.classList.remove("solution-dot");
+        });
+    }
+
+    if (solutionHintActive && currentTask && currentTask.cells && currentTask.cells.length > 0) {
+        const hintIndex = getCurrentSolutionHintIndex();
+        const hintCell = currentTask.cells[hintIndex] || [];
+        const hintWrap = row.children[hintIndex];
+        const hintBrailleCell = hintWrap ? hintWrap.querySelector('.braille-cell') : null;
+        if (hintBrailleCell) {
+            hintBrailleCell.querySelectorAll('.dot').forEach(dotEl => {
+                const dot = Number(dotEl.dataset.dot);
+                dotEl.classList.toggle('solution-dot', hintCell.includes(dot));
+            });
+        }
+    }
+
+    if (!solutionHintActive) {
+        const enteredPointNotation = inputCells.length > 0
+            ? inputCells.map(dotsToPointNotation).join(" · ")
+            : "";
+        setBrailleSolutionDisplay(enteredPointNotation, "entered");
+    }
+}
+
+
+function clearInput(unlock = true) {
+    inputCells = [];
+    if (unlock) answerLocked = false;
+    chordDots.clear();
+    pressedKeys.clear();
+    chordCommitted = false;
+
+    if (keyVisualTimer) {
+        clearTimeout(keyVisualTimer);
+        keyVisualTimer = null;
+    }
+    if (wrongKeyTimer) {
+        clearTimeout(wrongKeyTimer);
+        wrongKeyTimer = null;
+    }
+
+    brailleKeyButtons.forEach(button => {
+        button.classList.remove("pressed");
+        button.classList.remove("wrong-key");
+        if (!solutionHintActive) {
+            button.classList.remove("hint-key");
+        }
+    });
+
+    updateBrailleDisplay();
+
+    const feedback = document.getElementById("feedback");
+    if (feedback) {
+        feedback.className = "feedback";
+        feedback.textContent = "";
+    }
+
+    const solution = document.getElementById("solution");
+    if (solution) solution.style.display = "none";
+
+    const nextButton = document.getElementById("nextButton");
+    if (nextButton) nextButton.classList.remove("next-highlight");
+}
+
+function checkAnswer() {
+    if (!currentTask || inputCells.length === 0 || answerLocked) return;
+
+    const entered = inputCells.map(cellKey).join("|");
+    const correct = currentTask.cells.map(cellKey).join("|");
+
+    const feedback = document.getElementById("feedback");
+
+    answerLocked = true;
+
+    if (entered === correct) {
+        solutionHintActive = false;
+        document.querySelectorAll(".braille-key").forEach(button => {
+            button.classList.remove("hint-key");
+            button.classList.remove("solution-key");
+        });
+
+        correctStreak++;
+
+        if (trainingMode) {
+            const streakText = formatStreak(correctStreak);
+
+            feedback.className = "feedback correct";
+            feedback.textContent = streakText;
+
+            setProgressText(streakText);
+            document.getElementById("solution").style.display = "none";
+            document.getElementById("showSolutionButton").style.display = "";
+            document.getElementById("solutionButtonArea").classList.remove("visible");
+
+            playFeedbackAudio("correct");
+
+            setTimeout(function() {
+                if (currentTask && trainingMode) {
+                    nextQuestion();
+                }
+            }, 800);
+
+            return;
+        }
+
+        let successText = "Richtig!";
+
+        if (correctStreak === 2) {
+            successText = "Super!";
+        } else if (correctStreak === 3) {
+            successText = "Weiter so!";
+        } else if (correctStreak === 4) {
+            successText = "Perfekt!";
+        } else if (correctStreak >= 5) {
+            successText = "Wunderbar! 😍";
+        }
+
+        feedback.className = "feedback correct";
+        feedback.textContent = "✓ " + successText;
+
+        document.getElementById("solution").style.display = "none";
+        document.getElementById("showSolutionButton").style.display = "";
+        document.getElementById("solutionButtonArea").classList.remove("visible");
+        refreshExerciseHeight();
+
+        playFeedbackAudio("correct");
+
+        setTimeout(function() {
+            if (currentTask) {
+                nextQuestion();
+            }
+        }, 950);
+
+    } else {
+        const endedStreak = correctStreak;
+        correctStreak = 0;
+
+        feedback.className = "feedback";
+        feedback.textContent = "";
+
+        if (trainingMode) {
+            feedback.className = "feedback";
+            feedback.textContent = "";
+
+            playFeedbackAudio("wrong");
+
+            // Im Trainingsmodus wird bei Fehlern direkt die korrekte Lösung
+            // schrittweise angezeigt – ohne vorgeschalteten Punktcode der
+            // eigenen Eingabe.
+            const hintDuration = flashCorrectKeysSequentially(currentTask.cells, 700, 120);
+
+            document.getElementById("solution").style.display = "none";
+            document.getElementById("showSolutionButton").style.display = "";
+            document.getElementById("solutionButtonArea").classList.remove("visible");
+            setProgressText("Beginne deine Streak!");
+
+            setTimeout(function() {
+                if (trainingMode) {
+                    nextQuestion();
+                }
+            }, Math.max(1100, hintDuration + 120));
+
+            return;
+        }
+
+        feedback.className = "feedback";
+        feedback.textContent = "";
+
+        playFeedbackAudio("wrong");
+
+        if (!difficultTasks.includes(currentTask)) {
+            difficultTasks.push(currentTask);
+        }
+
+        // Den zuletzt eingegebenen Punktcode sichern, damit er trotz Zurücksetzen
+        // der Braillezellen sichtbar bleibt.
+        const enteredPointNotation = inputCells.map(dotsToPointNotation).join(" · ");
+
+        document.getElementById("solution").style.display = "none";
+        if (!solutionHintActive) {
+            document.getElementById("showSolutionButton").style.display = "";
+        } else {
+            document.getElementById("showSolutionButton").style.display = "none";
+        }
+        document.getElementById("solutionButtonArea").classList.add("visible");
+        refreshExerciseHeight();
+
+        answerLocked = false;
+        inputCells = [];
+        chordDots.clear();
+        pressedKeys.clear();
+        chordCommitted = false;
+        updateBrailleDisplay();
+
+        if (solutionHintActive) {
+            showSolutionHintStep();
+        } else if (enteredPointNotation) {
+            setBrailleSolutionDisplay(enteredPointNotation, "entered");
+        }
+    }
+}
+
+function renderSolutionBrailleMarkup(dots) {
+    if (!Array.isArray(dots) || dots.length === 0) return "";
+
+    const sortedDots = [...dots].sort((a, b) => a - b);
+    const dotsMarkup = sortedDots
+        .map(dot => '<span class="solution-braille-dot dot-' + dot + '"></span>')
+        .join("");
+
+    return '<span class="solution-braille-display"><span class="solution-braille-cell">' +
+        dotsMarkup +
+        '</span></span>';
+}
+
+function setBrailleSolutionDisplay(value, variant = "solution") {
+    const output = document.getElementById("unicodeOutput");
+    if (!output) return;
+
+    if (!value || (Array.isArray(value) && value.length === 0)) {
+        output.textContent = "";
+        return;
+    }
+
+    if (variant === "solution-braille") {
+        const pointCode = Array.isArray(value) ? dotsToPointNotation(value) : String(value);
+        output.innerHTML = '<span class="solution-code">' + pointCode + '</span>';
+        return;
+    }
+
+    const className = variant === "entered" ? "entered-code" : "solution-code";
+    output.innerHTML = '<span class="' + className + '">' + value + '</span>';
+}
+
+function showSolution() {
+    if (!currentTask) return;
+
+    solutionHintActive = true;
+
+    // Bei mehrzelligen Zeichen wird die Lösung schrittweise gezeigt:
+    // zunächst Zelle 1, nach korrekter Eingabe Zelle 2 usw.
+    if (!trainingMode) {
+        showSolutionHintStep();
+    }
+    
+    document.getElementById("showSolutionButton").style.display = "none";
+
+    // Die alte große Lösungsbox bleibt deaktiviert.
+    document.getElementById("solution").style.display = "none";
+    document.getElementById("solutionButtonArea").classList.add("visible");
+    refreshExerciseHeight();
+}
+
+
+function setKeyVisual(key, active) {
+    const button = buttonByKey[key];
+    if (!button) return;
+
+    if (active) {
+        button.classList.remove("wrong-key");
+        button.classList.add("pressed");
+    } else {
+        button.classList.remove("pressed");
+    }
+}
+
+function clearKeyVisuals() {
+    brailleKeyButtons.forEach(button => {
+        button.classList.remove("pressed");
+        button.classList.remove("wrong-key");
+        if (!solutionHintActive) {
+            button.classList.remove("hint-key");
+            button.classList.remove("solution-key");
+        }
+    });
+}
+
+function showCommittedChord(dots, duration = 320) {
+    if (keyVisualTimer) clearTimeout(keyVisualTimer);
+
+    clearKeyVisuals();
+
+    dots.forEach(dot => {
+        const key = dotToKey[dot];
+        if (key) setKeyVisual(key, true);
+    });
+
+    keyVisualTimer = setTimeout(() => {
+        brailleKeyButtons.forEach(button => button.classList.remove("pressed"));
+        keyVisualTimer = null;
+    }, duration);
+}
+
+function cellsEqual(a, b) {
+    return cellKey(a || []) === cellKey(b || []);
+}
+
+function getCurrentSolutionHintIndex() {
+    if (!currentTask || !currentTask.cells || currentTask.cells.length === 0) return 0;
+
+    const limit = Math.min(inputCells.length, currentTask.cells.length);
+    for (let index = 0; index < limit; index++) {
+        if (!cellsEqual(inputCells[index], currentTask.cells[index])) {
+            return index;
+        }
+    }
+
+    return Math.min(inputCells.length, currentTask.cells.length - 1);
+}
+
+function showSolutionHintStep() {
+    if (!currentTask || !currentTask.cells || currentTask.cells.length === 0) return;
+
+    solutionHintActive = true;
+
+    brailleKeyButtons.forEach(button => {
+        button.classList.remove("solution-key");
+        button.classList.remove("pressed");
+    });
+
+    const hintIndex = getCurrentSolutionHintIndex();
+    const hintCell = currentTask.cells[hintIndex];
+
+    hintCell.forEach(dot => {
+        const key = dotToKey[dot];
+        const button = key ? buttonByKey[key] : null;
+        if (button) button.classList.add("solution-key");
+    });
+
+    updateBrailleDisplay();
+    setBrailleSolutionDisplay(hintCell, "solution-braille");
+}
+
+function clearSequentialHintTimers() {
+    sequentialHintTimers.forEach(timer => clearTimeout(timer));
+    sequentialHintTimers = [];
+}
+
+function flashCorrectKeysSequentially(correctCells, durationPerCell = 700, gap = 120) {
+    clearSequentialHintTimers();
+
+    if (!correctCells || correctCells.length === 0) return 0;
+
+    // Bei mehrzelligen Zeichen etwas mehr Zeit geben, damit die beiden
+    // Einblendungen leichter nacheinander verfolgt werden können.
+    if (correctCells.length > 1) {
+        durationPerCell = Math.max(durationPerCell, 950);
+        gap = Math.max(gap, 180);
+    }
+
+    if (wrongKeyTimer) {
+        clearTimeout(wrongKeyTimer);
+        wrongKeyTimer = null;
+    }
+    if (keyVisualTimer) {
+        clearTimeout(keyVisualTimer);
+        keyVisualTimer = null;
+    }
+
+    // Vor Beginn alle übrigen Tastenzustände sicher entfernen.
+    brailleKeyButtons.forEach(button => {
+        button.classList.remove("pressed");
+        button.classList.remove("hint-key");
+        button.classList.remove("solution-key");
+    });
+
+    function showSurvivalHintCell(index) {
+        brailleKeyButtons.forEach(button => {
+            button.classList.remove("pressed");
+            button.classList.remove("hint-key");
+        });
+
+        const cell = correctCells[index];
+        cell.forEach(dot => {
+            const key = dotToKey[dot];
+            const button = key ? buttonByKey[key] : null;
+            if (button) button.classList.add("hint-key");
+        });
+
+        // Punktcode und Tastenkombination gehören immer zur selben Zelle.
+        setBrailleSolutionDisplay(cell, "solution-braille");
+    }
+
+    // Zelle 1 wird sofort eingeblendet. Dadurch geht sie nicht in einem
+    // nachgelagerten 0-ms-Timer verloren.
+    showSurvivalHintCell(0);
+
+    for (let index = 1; index < correctCells.length; index++) {
+        const startDelay = index * (durationPerCell + gap);
+        sequentialHintTimers.push(setTimeout(function() {
+            showSurvivalHintCell(index);
+        }, startDelay));
+    }
+
+    const totalDuration = correctCells.length * durationPerCell +
+        Math.max(0, correctCells.length - 1) * gap;
+
+    sequentialHintTimers.push(setTimeout(function() {
+        brailleKeyButtons.forEach(button => button.classList.remove("hint-key"));
+        sequentialHintTimers = [];
+    }, totalDuration));
+
+    return totalDuration;
+}
+
+function showWrongPressedKeys(enteredCells, correctCells, duration = 900) {
+    if (wrongKeyTimer) clearTimeout(wrongKeyTimer);
+    if (keyVisualTimer) {
+        clearTimeout(keyVisualTimer);
+        keyVisualTimer = null;
+    }
+
+    clearKeyVisuals();
+
+    const wrongDots = new Set();
+
+    enteredCells.forEach((enteredCell, index) => {
+        const expectedCell = correctCells[index] || [];
+        enteredCell.forEach(dot => {
+            if (!expectedCell.includes(dot)) wrongDots.add(dot);
+        });
+    });
+
+    wrongDots.forEach(dot => {
+        const key = Object.keys(keyToDot).find(k => keyToDot[k] === dot);
+        const button = key
+            ? document.querySelector('[data-key="' + key + '"]')
+            : null;
+        if (button) button.classList.add("wrong-key");
+    });
+
+    wrongKeyTimer = setTimeout(() => {
+        document.querySelectorAll(".braille-key").forEach(button =>
+            button.classList.remove("wrong-key")
+        );
+        wrongKeyTimer = null;
+    }, duration);
+}
+
+document.addEventListener("keydown", event => {
+    const key = event.key.toLowerCase();
+    if (!(key in keyToDot) || !currentTask || answerLocked) return;
+
+    event.preventDefault();
+    if (pressedKeys.has(key)) return;
+
+    if (pressedKeys.size === 0) {
+        chordDots.clear();
+        chordCommitted = false;
+    }
+
+    pressedKeys.add(key);
+    chordDots.add(keyToDot[key]);
+    setKeyVisual(key, true);
+});
+
+document.addEventListener("keyup", event => {
+    const key = event.key.toLowerCase();
+    if (!(key in keyToDot) || !currentTask || answerLocked) return;
+
+    event.preventDefault();
+    pressedKeys.delete(key);
+
+    if (!chordCommitted) {
+        commitChord();
+        chordCommitted = true;
+    }
+
+    if (pressedKeys.size === 0) {
+        chordDots.clear();
+        chordCommitted = false;
+    }
+});
+
+document.querySelectorAll(".braille-key").forEach(button => {
+    const key = button.dataset.key;
+    const dot = Number(button.dataset.dot);
+
+    button.addEventListener("pointerdown", event => {
+        if (answerLocked || !currentTask) return;
+        event.preventDefault();
+
+        try { button.setPointerCapture(event.pointerId); } catch(e) {}
+
+        if (pressedKeys.size === 0) {
+            chordDots.clear();
+            chordCommitted = false;
+        }
+
+        pressedKeys.add(key);
+        chordDots.add(dot);
+        setKeyVisual(key, true);
+    });
+
+    button.addEventListener("pointerup", event => {
+        event.preventDefault();
+
+        pressedKeys.delete(key);
+
+        if (!chordCommitted) {
+            commitChord();
+            chordCommitted = true;
+        }
+
+        if (pressedKeys.size === 0) {
+            chordDots.clear();
+            chordCommitted = false;
+        }
+    });
+
+    button.addEventListener("pointercancel", () => {
+        pressedKeys.delete(key);
+        setKeyVisual(key, false);
+        if (pressedKeys.size === 0) {
+            chordDots.clear();
+            chordCommitted = false;
+        }
+    });
+});
+
+window.addEventListener("load", function() {
+    updateAppStageHeight("startArea");
+    observeActiveAppView();
+});
+
+let menuMusicUnlocked = false;
+
+function unlockMenuMusicOnInteraction() {
+    if (menuMusicUnlocked) return;
+
+    const startArea = document.getElementById("startArea");
+    if (!musicEnabled || !startArea || !startArea.classList.contains("active")) return;
+
+    startMenuMusic();
+
+    // Sobald ein Abspielversuch innerhalb einer echten Nutzerinteraktion erfolgt ist,
+    // gilt die Audiositzung als initialisiert. Weitere Ansichtswechsel können danach
+    // die passende Hintergrundmusik automatisch starten.
+    menuMusicUnlocked = true;
+
+    window.removeEventListener("pointerdown", unlockMenuMusicOnInteraction, true);
+    window.removeEventListener("keydown", unlockMenuMusicOnInteraction, true);
+    window.removeEventListener("touchstart", unlockMenuMusicOnInteraction, true);
+}
+
+window.addEventListener("pointerdown", unlockMenuMusicOnInteraction, true);
+window.addEventListener("keydown", unlockMenuMusicOnInteraction, true);
+window.addEventListener("touchstart", unlockMenuMusicOnInteraction, true);
+
+
+window.addEventListener("load", function() {
+    updateMusicToggleButton();
+
+    // Datei vorladen; echtes Abspielen beginnt bei der ersten Nutzerinteraktion.
+    if (!menuMusic) {
+        menuMusic = new Audio();
+        menuMusic.src = "audio/menu_background.wav";
+        menuMusic.preload = "auto";
+        menuMusic.loop = true;
+        menuMusic.volume = 0.11;
+        menuMusic.load();
+    }
+});
+
+updateStartButtonTheme();
+</script>
+</div>
+
+<style>
+#startArea:not(.custom-selection-active) .selection-footer {
+    display: none !important;
+}
+#startArea.custom-selection-active .selection-footer {
+    display: grid !important;
+}
+</style>
+
+<style>
+#selectionInfo .selection-hint {
+    display: block;
+    margin-top: 4px;
+}
+</style>
+
+
+<style>
+#solutionButtonArea {
+    bottom: 68px !important;
+    min-height: 44px !important;
+}
+
+#showSolutionButton {
+    min-width: 0 !important;
+    width: 44px !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: transparent !important;
+    color: #c76593 !important;
+    border: none !important;
+    box-shadow: none !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    outline: none;
+    line-height: 1 !important;
+    opacity: 0.95;
+    position: relative;
+    isolation: isolate;
+}
+
+#showSolutionButton .solution-eye-icon {
+    width: 34px;
+    height: 34px;
+    overflow: visible;
+    position: relative;
+    z-index: 1;
+    filter: none;
+}
+
+#showSolutionButton::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 62px;
+    height: 62px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        rgba(199, 101, 147, 0.52) 0%,
+        rgba(199, 101, 147, 0.30) 34%,
+        rgba(199, 101, 147, 0.14) 58%,
+        rgba(199, 101, 147, 0.00) 76%
+    );
+    filter: blur(2px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+#showSolutionButton:hover,
+#showSolutionButton:focus-visible {
+    background: transparent !important;
+    color: #b64f82 !important;
+    opacity: 1;
+    transform: scale(1.04);
+    box-shadow: none !important;
+}
+
+#showSolutionButton:hover::before,
+#showSolutionButton:focus-visible::before {
+    width: 68px;
+    height: 68px;
+    background: radial-gradient(
+        circle,
+        rgba(199, 101, 147, 0.62) 0%,
+        rgba(199, 101, 147, 0.38) 34%,
+        rgba(199, 101, 147, 0.18) 58%,
+        rgba(199, 101, 147, 0.00) 78%
+    );
+}
+
+#showSolutionButton:active {
+    background: transparent !important;
+    color: #a64574 !important;
+    transform: scale(0.98);
+    box-shadow: none !important;
+}
+
+/* Im Trainingsmodus wird die korrekte Eingabe weiterhin automatisch angedeutet;
+   dort braucht es deshalb keinen zusätzlichen Lösungsbutton. */
+#exerciseArea.training-theme #solutionButtonArea {
+    visibility: hidden !important;
+}
+</style>
+
+
+<style>
+.unicode-output.solution-shown,
+.unicode-output.solution-visible,
+#unicodeOutput.solution-shown,
+#unicodeOutput.solution-visible {
+    color: #b84d7f !important;
+    font-weight: 800 !important;
+    text-shadow: 0 0 5px rgba(184, 77, 127, 0.18);
+}
+</style>
+
+<!-- Flexible Ansichten mit kompakter Maximalgröße; längere Inhalte dürfen wachsen. -->
+<style>
+:root {
+    --window-padding: clamp(8px, 1.5vw, 24px);
+    --layout-padding: clamp(12px, 2vw, 28px);
+    --cell-track: clamp(32px, min(4.4vw, 6vh), 64px);
+    --cell-dot: clamp(24px, min(3.3vw, 4.5vh), 48px);
+    --cell-gap: clamp(6px, 1vh, 12px);
+    --key-width: clamp(32px, calc((100vw - 140px) / 6), 90px);
+    --key-height: clamp(54px, min(7vw, 11vh), 100px);
+}
+body { padding: var(--window-padding); }
+.container {
+    width: 100%;
+    max-width: 960px;
+    min-width: 0;
+    min-height: min(680px, calc(100vh - 2 * var(--window-padding)));
+    min-height: min(680px, calc(100dvh - 2 * var(--window-padding)));
+    padding: var(--layout-padding);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(8px, 1.5vh, 16px);
+}
+.app-stage, body.exercise-active .app-stage {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    height: auto !important;
+    transition: none;
+}
+.app-stage #startArea, .app-stage #exerciseArea {
+    position: relative;
+    inset: auto;
+    width: 100%; height: auto;
+    min-width: 0; min-height: 0;
+    margin: 0; flex: 1;
+}
+.app-stage #startArea:not(.active), .app-stage #exerciseArea:not(.active) { display: none; }
+.app-stage > .app-view.active { display: flex; flex-direction: column; }
+#startArea { padding: var(--layout-padding) var(--layout-padding) 76px; }
+#startArea h2, #startArea #menuStage, #startArea .selection-footer { max-width: none; }
+#startArea h2 { margin: 12px 0 clamp(16px, 3vh, 30px); font-size: clamp(1.35rem, 2.2vw, 2rem); }
+.menu-stage, #startArea.custom-selection-active #menuStage {
+    height: auto !important; min-height: 0; flex: 1;
+    margin-top: 0;
+}
+.menu-view { position: relative; inset: auto; display: none; }
+.menu-view.active { display: block; }
+.module-grid.menu-view.active { display: grid; }
+.module-grid { gap: clamp(10px, 1.5vw, 20px); }
+.module-button { min-height: clamp(66px, 11vh, 108px); margin: 0; padding: clamp(12px, 2vh, 22px); }
+.module-title { font-size: clamp(1rem, 1.3vw, 1.2rem); }
+.module-subtitle { font-size: clamp(.84rem, 1.1vw, 1rem); }
+#startArea .module-button-all { min-width: 0; }
+#startArea .selection-footer {
+    position: static; inset: auto; transform: none;
+    height: auto; min-height: 0; margin-top: 20px;
+    flex-direction: column; gap: 12px;
+}
+#startArea.custom-selection-active .selection-footer { display: flex !important; }
+#startArea #selectionInfo { height: auto; min-height: 0; }
+#startArea .selection-footer .button-area { height: auto; }
+.custom-choice-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 64px), 1fr)); gap: 6px; }
+.custom-choice { min-height: 40px; }
+#exerciseArea .writer {
+    flex: 1; height: auto; min-height: 0;
+    overflow: visible;
+    padding: clamp(12px, 2vh, 24px) clamp(8px, 2vw, 24px) 144px;
+}
+.writer-instruction, .keyboard-help { overflow-wrap: anywhere; }
+.paper, .cell-row {
+    height: auto;
+    min-height: calc(3 * var(--cell-track) + 2 * var(--cell-gap));
+}
+.paper { margin-top: clamp(12px, 2.5vh, 28px); }
+.cell-row { gap: clamp(16px, 3vw, 40px); }
+.braille-cell {
+    grid-template-columns: repeat(2, var(--cell-track));
+    grid-template-rows: repeat(3, var(--cell-track));
+    gap: var(--cell-gap) clamp(10px, 1.5vw, 20px);
+}
+.dot { width: var(--cell-dot); height: var(--cell-dot); }
+.braille-keyboard { max-width: 100%; gap: clamp(3px, .7vw, 10px); }
+.braille-key { width: var(--key-width); height: var(--key-height); flex: 0 1 var(--key-width); min-width: 0; padding: 4px 2px; }
+.keyboard-divider { width: clamp(8px, 1.7vw, 24px); flex: 0 0 clamp(8px, 1.7vw, 24px); }
+.key-letter { font-size: clamp(1rem, 1.4vw, 1.3rem); }
+.key-dot { font-size: clamp(.65rem, 1vw, .9rem); white-space: nowrap; }
+.unicode-output { min-height: 38px; height: auto; margin: clamp(8px, 1.5vh, 16px) auto; }
+#exerciseArea .feedback, #exerciseArea.training-theme .feedback {
+    bottom: 22px;
+    max-width: calc(100% - 140px);
+    min-height: 44px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    padding: 8px 12px;
+}
+#solutionButtonArea { bottom: 78px !important; }
+#exerciseArea.completion-view { min-height: 0; }
+#exerciseArea.completion-view .writer { min-height: 0; padding: clamp(12px, 2vh, 24px); }
+#exerciseArea.completion-view .difficult-signs-panel { min-height: 0; padding: clamp(16px, 3vw, 28px); }
+.difficult-signs-actions, .difficult-signs-actions button { width: 100%; min-width: 0; }
+#status:empty { display: none; }
+@media (max-width: 650px) {
+    #startArea .module-button-all { width: 100%; }
+    #exerciseArea .writer { padding-bottom: 150px; }
+    #exerciseArea .feedback, #exerciseArea.training-theme .feedback { bottom: 78px; max-width: calc(100% - 32px); }
+    #solutionButtonArea { bottom: 14px !important; }
+    .custom-set-header { grid-template-columns: minmax(0, 1fr) auto; }
+    .custom-set-toggle { padding: 8px; }
+    .custom-select-all-inline { font-size: .75rem; padding: 0 8px; }
+}
+</style>
+
+</body>
+</html>
+
+<style>
+#subMenuTitle[hidden] {
+    display: none !important;
+}
+</style>
