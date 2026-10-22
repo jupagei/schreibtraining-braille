@@ -1,2 +1,2 @@
 # schreibtraining-braille
-Braille-Schreibtraining zum einüben der Vollschrift-Zeichen.
+Braille-Schreibtraining zum Einüben der Vollschrift-Zeichen.
